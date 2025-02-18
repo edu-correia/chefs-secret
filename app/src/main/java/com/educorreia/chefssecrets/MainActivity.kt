@@ -34,8 +34,21 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import coil3.compose.SubcomposeAsyncImage
 import com.educorreia.chefssecrets.ui.theme.AppTheme
+import kotlinx.serialization.Serializable
+
+@Serializable
+object RecipesListRoute
+
+@Serializable
+data class RecipeDetailRoute(
+    val recipeId: String
+)
 
 class MainActivity : ComponentActivity() {
     private val viewModel: RecipesListViewModel by viewModels {
@@ -46,31 +59,45 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AppTheme () {
-                SystemBarColor(
-                    color = AppTheme.colorScheme.secondary,
-                    isLightIcons = false
-                )
+            AppTheme {
+                Scaffold { pad ->
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = RecipesListRoute,
+                        modifier = Modifier.padding(pad)
+                    ) {
+                        composable<RecipesListRoute> {
+                            val items = viewModel.uiState.collectAsState()
 
-                val items = viewModel.uiState.collectAsState()
+                            RecipesListScreen(items.value)
+                        }
 
-                MyApp(items.value)
+                        composable<RecipeDetailRoute> {
+                            val args = it.toRoute<RecipeDetailRoute>()
+                            Text("TODO: Implement details screen")
+                        }
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun MyApp(items: List<RecipeItem>) {
-    Scaffold(containerColor = AppTheme.colorScheme.background) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            Header()
-            RecipesList(items)
-        }
+fun RecipesListScreen(items: List<RecipeItem>) {
+    SystemBarColor(
+        color = AppTheme.colorScheme.secondary,
+        isLightIcons = false
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(AppTheme.colorScheme.background)
+    ) {
+        Header()
+        RecipesList(items)
     }
 }
 
@@ -231,7 +258,7 @@ fun RecipeTile(recipe: RecipeItem) {
 @Composable
 fun PagePreview() {
     AppTheme {
-        MyApp(
+        RecipesListScreen(
             listOf(
                 RecipeItem("abc", "abc", "abcde"),
                 RecipeItem("abc", "abc", "abcde"),
