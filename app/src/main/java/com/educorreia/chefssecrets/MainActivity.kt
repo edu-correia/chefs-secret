@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -41,20 +40,17 @@ import androidx.navigation.toRoute
 import coil3.compose.SubcomposeAsyncImage
 import com.educorreia.chefssecrets.ui.theme.AppTheme
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
 
 @Serializable
 object RecipesListRoute
 
 @Serializable
-data class RecipeDetailRoute(
+data class RecipeDetailsRoute(
     val recipeId: String
 )
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: RecipesListViewModel by viewModels {
-        RecipesListViewModel.Factory(MockedRecipesRepository)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -68,14 +64,17 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(pad)
                     ) {
                         composable<RecipesListRoute> {
+                            val viewModel = koinViewModel<RecipesListViewModel>()
                             val items = viewModel.uiState.collectAsState()
 
                             RecipesListScreen(items.value)
                         }
 
-                        composable<RecipeDetailRoute> {
-                            val args = it.toRoute<RecipeDetailRoute>()
-                            Text("TODO: Implement details screen")
+                        composable<RecipeDetailsRoute> {
+                            val viewModel = koinViewModel<RecipeDetailsViewModel>()
+                            val args = it.toRoute<RecipeDetailsRoute>()
+                            Text("TODO: Implement details screen for each of the " +
+                                    "${viewModel.uiState.value} items")
                         }
                     }
                 }

@@ -52,12 +52,13 @@ dependencies {
     implementation(libs.androidx.material3)
 
     // Coil Compose
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
+    implementation(libs.bundles.coil.compose)
 
     // Compose Navigation
-    implementation(libs.navigation.compose)
-    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.bundles.compose.navigation)
+
+    // Koin
+    implementation(libs.bundles.koin.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
