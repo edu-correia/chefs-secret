@@ -1,9 +1,8 @@
-package com.educorreia.chefssecrets
+package com.educorreia.chefssecrets.recipes.recipes_list.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.educorreia.chefssecrets.recipes.common.domain.interfaces.RecipesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 

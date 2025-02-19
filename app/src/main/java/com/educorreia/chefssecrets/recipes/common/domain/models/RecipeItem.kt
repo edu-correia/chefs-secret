@@ -1,4 +1,4 @@
-package com.educorreia.chefssecrets
+package com.educorreia.chefssecrets.recipes.common.domain.models
 
 data class RecipeItem (
     val id: String,

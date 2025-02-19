@@ -1,4 +1,7 @@
-package com.educorreia.chefssecrets
+package com.educorreia.chefssecrets.recipes.common.data
+
+import com.educorreia.chefssecrets.recipes.common.domain.interfaces.RecipesRepository
+import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeItem
 
 object MockedRecipesRepository : RecipesRepository {
     override fun getRecipes(): List<RecipeItem> {
