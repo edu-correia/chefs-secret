@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class RecipeDetailsViewModel(private val repository: RecipesRepository) : ViewModel() {
-    private val _uiState = MutableStateFlow(repository.getRecipes().size)
+    private val _uiState = MutableStateFlow(RecipeDetailsUiState(repository.getRecipes().size))
     val uiState = _uiState.asStateFlow()
 }

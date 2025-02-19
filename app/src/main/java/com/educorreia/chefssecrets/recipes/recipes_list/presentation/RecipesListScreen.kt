@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeItem
@@ -13,9 +14,19 @@ import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.RecipesList
 import com.educorreia.chefssecrets.ui.theme.AppTheme
 import com.educorreia.chefssecrets.ui.theme.SystemBarColor
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun RecipesListScreen(items: List<RecipeItem>) {
+fun RecipesListScreenRoot(
+    viewModel: RecipesListViewModel = koinViewModel<RecipesListViewModel>()
+) {
+    val uiState = viewModel.uiState.collectAsState()
+
+    RecipesListScreen(uiState.value)
+}
+
+@Composable
+fun RecipesListScreen(uiState: RecipesListUiState) {
     SystemBarColor(
         color = AppTheme.colorScheme.secondary,
         isLightIcons = false
@@ -27,7 +38,7 @@ fun RecipesListScreen(items: List<RecipeItem>) {
             .background(AppTheme.colorScheme.background)
     ) {
         Header()
-        RecipesList(items)
+        RecipesList(uiState.recipesList)
     }
 }
 
@@ -37,9 +48,11 @@ fun RecipesListScreen(items: List<RecipeItem>) {
 fun RecipesListScreenPreview() {
     AppTheme {
         RecipesListScreen(
-            listOf(
-                RecipeItem(id = "123", title = "Caesar's salad", description = "Lorem ipsum dolor asit met."),
-                RecipeItem(id = "456", title = "Mac & Cheese", description = "Delicious combination of macaroni and parmesan cheese."),
+            RecipesListUiState(
+                listOf(
+                    RecipeItem(id = "123", title = "Caesar's salad", description = "Lorem ipsum dolor asit met."),
+                    RecipeItem(id = "456", title = "Mac & Cheese", description = "Delicious combination of macaroni and parmesan cheese."),
+                )
             )
         )
     }
