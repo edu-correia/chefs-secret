@@ -1,4 +1,4 @@
-package com.educorreia.chefssecrets.ui.theme
+package com.educorreia.chefssecrets.core.ui.theme
 
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily

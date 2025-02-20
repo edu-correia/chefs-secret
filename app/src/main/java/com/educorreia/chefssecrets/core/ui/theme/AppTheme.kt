@@ -1,4 +1,4 @@
-package com.educorreia.chefssecrets.ui.theme
+package com.educorreia.chefssecrets.core.ui.theme
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.isSystemInDarkTheme

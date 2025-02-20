@@ -1,4 +1,4 @@
-package com.educorreia.chefssecrets
+package com.educorreia.chefssecrets.core.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -15,7 +15,7 @@ import com.educorreia.chefssecrets.recipes.recipe_details.presentation.RecipeDet
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.RecipeDetailsScreenRoot
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.RecipesListRoute
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.RecipesListScreenRoot
-import com.educorreia.chefssecrets.ui.theme.AppTheme
+import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

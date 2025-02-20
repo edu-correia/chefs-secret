@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeItem
-import com.educorreia.chefssecrets.ui.theme.AppTheme
+import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 
 @Composable
 fun RecipesList(items: List<RecipeItem>) {

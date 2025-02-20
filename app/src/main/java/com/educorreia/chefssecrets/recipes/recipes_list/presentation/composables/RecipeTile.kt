@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
 import com.educorreia.chefssecrets.R
 import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeItem
-import com.educorreia.chefssecrets.ui.theme.AppTheme
+import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 
 @Composable
 fun RecipeTile(recipe: RecipeItem) {

@@ -12,8 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeItem
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.Header
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.RecipesList
-import com.educorreia.chefssecrets.ui.theme.AppTheme
-import com.educorreia.chefssecrets.ui.theme.SystemBarColor
+import com.educorreia.chefssecrets.core.ui.theme.AppTheme
+import com.educorreia.chefssecrets.core.ui.theme.SystemBarColor
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -27,10 +27,7 @@ fun RecipesListScreenRoot(
 
 @Composable
 fun RecipesListScreen(uiState: RecipesListUiState) {
-    SystemBarColor(
-        color = AppTheme.colorScheme.secondary,
-        isLightIcons = false
-    )
+    SystemBarColor(color = AppTheme.colorScheme.secondary)
 
     Column(
         modifier = Modifier

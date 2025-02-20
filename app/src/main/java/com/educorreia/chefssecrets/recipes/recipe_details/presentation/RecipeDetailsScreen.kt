@@ -6,8 +6,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
-import com.educorreia.chefssecrets.ui.theme.AppTheme
-import com.educorreia.chefssecrets.ui.theme.SystemBarColor
+import com.educorreia.chefssecrets.core.ui.theme.AppTheme
+import com.educorreia.chefssecrets.core.ui.theme.SystemBarColor
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
