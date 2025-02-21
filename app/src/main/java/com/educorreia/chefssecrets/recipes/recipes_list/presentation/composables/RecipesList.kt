@@ -32,7 +32,10 @@ fun RecipesList(items: List<RecipeItem>) {
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
-        items(items.size) { index ->
+        items(
+            count = items.size,
+            key = { items[it].id }
+        ) { index ->
             val recipe = items[index]
             RecipeTile(recipe)
         }

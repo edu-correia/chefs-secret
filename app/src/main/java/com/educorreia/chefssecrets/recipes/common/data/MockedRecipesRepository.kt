@@ -7,42 +7,42 @@ object MockedRecipesRepository : RecipesRepository {
     override fun getRecipes(): List<RecipeItem> {
         return listOf(
             RecipeItem(
-                id = "123",
+                id = "1",
                 title = "Caesar's salad",
                 description = "Lorem ipsum dolor asit met."
             ),
             RecipeItem(
-                id = "456",
+                id = "2",
                 title = "Mac & Cheese",
                 description = "Delicious combination of macaroni and parmesan cheese."
             ),
             RecipeItem(
-                id = "123",
+                id = "3",
                 title = "Caesar's salad",
                 description = "Lorem ipsum dolor asit met."
             ),
             RecipeItem(
-                id = "456",
+                id = "4",
                 title = "Mac & Cheese",
                 description = "Delicious combination of macaroni and parmesan cheese."
             ),
             RecipeItem(
-                id = "123",
+                id = "5",
                 title = "Caesar's salad",
                 description = "Lorem ipsum dolor asit met."
             ),
             RecipeItem(
-                id = "456",
+                id = "6",
                 title = "Mac & Cheese",
                 description = "Delicious combination of macaroni and parmesan cheese."
             ),
             RecipeItem(
-                id = "123",
+                id = "7",
                 title = "Caesar's salad",
                 description = "Lorem ipsum dolor asit met."
             ),
             RecipeItem(
-                id = "456",
+                id = "8",
                 title = "Mac & Cheese",
                 description = "Delicious combination of macaroni and parmesan cheese."
             ),
