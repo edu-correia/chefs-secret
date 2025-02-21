@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ChefsSecrets</string>
+    <string name="error_recipe_name_empty">Recipe name can\'t be empty</string>
+    <string name="error_recipe_description_empty">Recipe description can\'t be empty</string>
+    <string name="error_recipe_image_url_empty">Recipe image URL can\'t be empty</string>
+    <string name="error_recipe_image_url_invalid_link">Recipe image URL\'s link is invalid</string>
+    <string name="unknown_error">Unknown error</string>
 </resources>

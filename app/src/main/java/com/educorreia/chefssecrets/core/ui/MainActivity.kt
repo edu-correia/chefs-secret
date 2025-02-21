@@ -18,6 +18,8 @@ import com.educorreia.chefssecrets.core.ui.snackbar.CustomSnackbar
 import com.educorreia.chefssecrets.core.ui.snackbar.CustomSnackbarVisuals
 import com.educorreia.chefssecrets.core.ui.snackbar.SnackbarSetup
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
+import com.educorreia.chefssecrets.recipes.create_recipe.presentation.CreateRecipeRoute
+import com.educorreia.chefssecrets.recipes.create_recipe.presentation.CreateRecipeScreenRoot
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.RecipeDetailsRoute
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.RecipeDetailsScreenRoot
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.RecipesListRoute
@@ -48,12 +50,16 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(pad)
                     ) {
                         composable<RecipesListRoute> {
-                            RecipesListScreenRoot()
+                            RecipesListScreenRoot(navController)
                         }
 
                         composable<RecipeDetailsRoute> {
                             val args = it.toRoute<RecipeDetailsRoute>()
                             RecipeDetailsScreenRoot(arguments = args)
+                        }
+
+                        composable<CreateRecipeRoute> {
+                            CreateRecipeScreenRoot()
                         }
                     }
                 }

@@ -20,8 +20,8 @@ import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 fun RecipesList(items: List<RecipeItem>) {
     LazyColumn(
         modifier = Modifier
-            .padding(vertical = 12.dp, horizontal = 24.dp)
             .background(AppTheme.colorScheme.background)
+            .padding(vertical = 12.dp, horizontal = 24.dp)
     ) {
         item {
             Column {

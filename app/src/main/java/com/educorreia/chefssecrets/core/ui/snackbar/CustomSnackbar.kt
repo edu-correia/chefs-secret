@@ -4,6 +4,7 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
@@ -20,7 +21,9 @@ import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 @Composable
 fun CustomSnackbar(visuals: CustomSnackbarVisuals) {
     Snackbar(
-        containerColor = visuals.containerColor
+        containerColor = visuals.containerColor,
+        modifier = Modifier
+            .padding(24.dp)
     ) {
         Row (
             verticalAlignment = Alignment.CenterVertically
