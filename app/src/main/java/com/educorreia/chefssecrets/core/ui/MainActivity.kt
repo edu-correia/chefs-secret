@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -35,31 +37,33 @@ class MainActivity : ComponentActivity() {
 
                 SnackbarSetup(snackbarHostState)
 
-                Scaffold (
-                    snackbarHost = {
-                        SnackbarHost(hostState = snackbarHostState) { data ->
-                            val visuals = data.visuals as CustomSnackbarVisuals
-                            CustomSnackbar(visuals)
-                        }
-                    },
-                ) { pad ->
-                    val navController = rememberNavController()
-                    NavHost(
-                        navController = navController,
-                        startDestination = RecipesListRoute,
-                        modifier = Modifier.padding(pad)
-                    ) {
-                        composable<RecipesListRoute> {
-                            RecipesListScreenRoot(navController)
-                        }
+                Box(Modifier.safeDrawingPadding()) {
+                    Scaffold (
+                        snackbarHost = {
+                            SnackbarHost(hostState = snackbarHostState) { data ->
+                                val visuals = data.visuals as CustomSnackbarVisuals
+                                CustomSnackbar(visuals)
+                            }
+                        },
+                    ) { pad ->
+                        val navController = rememberNavController()
+                        NavHost(
+                            navController = navController,
+                            startDestination = RecipesListRoute,
+                            modifier = Modifier.padding(pad)
+                        ) {
+                            composable<RecipesListRoute> {
+                                RecipesListScreenRoot(navController)
+                            }
 
-                        composable<RecipeDetailsRoute> {
-                            val args = it.toRoute<RecipeDetailsRoute>()
-                            RecipeDetailsScreenRoot(arguments = args)
-                        }
+                            composable<RecipeDetailsRoute> {
+                                val args = it.toRoute<RecipeDetailsRoute>()
+                                RecipeDetailsScreenRoot(arguments = args)
+                            }
 
-                        composable<CreateRecipeRoute> {
-                            CreateRecipeScreenRoot()
+                            composable<CreateRecipeRoute> {
+                                CreateRecipeScreenRoot()
+                            }
                         }
                     }
                 }
