@@ -91,7 +91,7 @@ fun CreateRecipeScreen(
             OutlinedButton(
                 text = "Cancel",
                 onClick = {
-                    // TODO: Implement go back function
+                    onEvent(CreateRecipeEvent.GoBack)
                 },
                 modifier = Modifier.weight(1f)
             )

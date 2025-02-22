@@ -5,4 +5,5 @@ sealed class CreateRecipeEvent {
     data class DescriptionChanged(val description: String) : CreateRecipeEvent()
     data class ImageUrlChanged(val imageUrl: String) : CreateRecipeEvent()
     object Submit: CreateRecipeEvent()
+    object GoBack: CreateRecipeEvent()
 }

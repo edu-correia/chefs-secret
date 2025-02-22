@@ -10,12 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import com.educorreia.chefssecrets.core.ui.composables.InnerScaffold
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 import com.educorreia.chefssecrets.core.ui.theme.SystemBarColor
 import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeItem
-import com.educorreia.chefssecrets.recipes.create_recipe.presentation.CreateRecipeRoute
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.Header
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.NewRecipeButton
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.RecipesList
@@ -23,18 +21,17 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RecipesListScreenRoot(
-    navController: NavController,
     viewModel: RecipesListViewModel = koinViewModel<RecipesListViewModel>(),
 ) {
     val uiState = viewModel.uiState.collectAsState()
 
-    RecipesListScreen(uiState.value, { navController.navigate(CreateRecipeRoute) })
+    RecipesListScreen(uiState.value, viewModel::onEvent)
 }
 
 @Composable
 fun RecipesListScreen(
     uiState: RecipesListUiState,
-    onNavigate: () -> Unit
+    onEvent: (RecipesListEvent) -> Unit
 ) {
     SystemBarColor(color = AppTheme.colorScheme.secondary)
 
@@ -43,7 +40,7 @@ fun RecipesListScreen(
         floatingActionButton = {
             NewRecipeButton (
                 onClick = {
-                    onNavigate()
+                    onEvent(RecipesListEvent.GoToCreateRecipePage)
                 }
             )
         }
@@ -71,7 +68,7 @@ fun RecipesListScreenPreview() {
                     RecipeItem(id = "456", title = "Mac & Cheese", description = "Delicious combination of macaroni and parmesan cheese."),
                 )
             ),
-            onNavigate = {}
+            onEvent = {}
         )
     }
 }

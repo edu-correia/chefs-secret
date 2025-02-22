@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 import com.educorreia.chefssecrets.core.ui.theme.SystemBarColor
+import com.educorreia.chefssecrets.core.ui.navigation.Route.RecipeDetailsRoute
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

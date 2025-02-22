@@ -3,6 +3,7 @@ package com.educorreia.chefssecrets.recipes.create_recipe.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.educorreia.chefssecrets.R
+import com.educorreia.chefssecrets.core.ui.navigation.Navigator
 import com.educorreia.chefssecrets.core.ui.utils.UiText
 import com.educorreia.chefssecrets.core.ui.utils.UiText.StringResource
 import com.educorreia.chefssecrets.recipes.create_recipe.domain.exceptions.ValidationException
@@ -16,7 +17,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class CreateRecipeViewModel : ViewModel() {
+class CreateRecipeViewModel(
+    private val navigator: Navigator
+) : ViewModel() {
     private var _uiState = MutableStateFlow(CreateRecipeUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -33,6 +36,11 @@ class CreateRecipeViewModel : ViewModel() {
             }
             is CreateRecipeEvent.ImageUrlChanged -> {
                 _uiState.value = _uiState.value.copy(image = event.imageUrl)
+            }
+            is CreateRecipeEvent.GoBack -> {
+                viewModelScope.launch {
+                    navigator.goBack()
+                }
             }
             CreateRecipeEvent.Submit -> submit()
         }
