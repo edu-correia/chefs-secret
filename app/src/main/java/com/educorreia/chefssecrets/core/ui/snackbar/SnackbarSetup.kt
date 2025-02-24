@@ -4,15 +4,15 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import com.educorreia.chefssecrets.core.ui.utils.ObserveAsEvents
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun SnackbarSetup(
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    scope: CoroutineScope
 ) {
-    val scope = rememberCoroutineScope()
     ObserveAsEvents(
         flow = SnackbarController.events,
         snackbarHostState

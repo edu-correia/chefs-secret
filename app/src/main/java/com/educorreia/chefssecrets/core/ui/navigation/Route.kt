@@ -13,4 +13,7 @@ sealed interface Route {
     data class RecipeDetailsRoute(
         val recipeId: String
     ): Route
+
+    @Serializable
+    object LoginRoute: Route
 }
