@@ -25,12 +25,12 @@ val appModule = module {
         DefaultNavigator(Route.LoginRoute)
     }
 
-    single<Authenticator> {
-        DefaultAuthenticator()
-    }
-
     single<UserAuthService> {
         FirebaseUserAuth()
+    }
+
+    single<Authenticator> {
+        DefaultAuthenticator(get())
     }
 
     viewModelOf(::LoginViewModel)

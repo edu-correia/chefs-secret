@@ -83,7 +83,7 @@ class FirebaseUserAuth : UserAuthService {
         onLogin()
     }
 
-    override suspend fun logout(context: Context) {
+    override suspend fun logout(context: Context, onLogout: () -> Unit) {
         if (!isUserAuthenticated()) return
 
         auth.signOut()
@@ -91,5 +91,7 @@ class FirebaseUserAuth : UserAuthService {
         val credentialManager = CredentialManager.create(context)
         val clearRequest = ClearCredentialStateRequest()
         credentialManager.clearCredentialState(clearRequest)
+
+        onLogout()
     }
 }

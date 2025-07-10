@@ -5,7 +5,7 @@ import com.educorreia.chefssecrets.core.data.domain.models.User
 
 interface UserAuthService {
     suspend fun loginWithGoogle(context: Context, onLogin: () -> Unit)
-    suspend fun logout(context: Context)
+    suspend fun logout(context: Context, onLogout: () -> Unit)
     fun isUserAuthenticated(): Boolean
     fun getAuthenticatedUser(): User?
 }

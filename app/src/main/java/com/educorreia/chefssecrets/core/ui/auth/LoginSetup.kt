@@ -29,6 +29,7 @@ fun LoginSetup(
             is AuthAction.LoginWithGoogle -> {
                 scope.launch {
                     userAuthService.loginWithGoogle(context) {
+                        authenticator.refreshAuthenticatedUser()
                         scope.launch {
                             navigator.navigate(Route.RecipesListRoute)
                         }
@@ -37,7 +38,12 @@ fun LoginSetup(
             }
             is AuthAction.Logout -> {
                 scope.launch {
-                    userAuthService.logout(context)
+                    userAuthService.logout(context) {
+                        authenticator.refreshAuthenticatedUser()
+                        scope.launch {
+                            navigator.navigate(Route.LoginRoute)
+                        }
+                    }
                 }
             }
         }

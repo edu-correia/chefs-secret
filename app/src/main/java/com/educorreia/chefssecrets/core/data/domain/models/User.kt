@@ -6,4 +6,8 @@ data class User(
     val email: String,
     val photoUrl: String,
     val phoneNumber: String?,
-)
+) {
+    fun getFirstName(): String {
+        return name.split(" ")[0]
+    }
+}

@@ -53,13 +53,15 @@ fun RecipeTile(recipe: RecipeItem) {
                 Text(
                     modifier = Modifier,
                     style = AppTheme.typography.titleNormal,
-                    text = recipe.title
+                    text = recipe.title,
+                    color = AppTheme.colorScheme.primary
                 )
 
                 Text(
                     modifier = Modifier,
                     style = AppTheme.typography.body,
-                    text = recipe.description
+                    text = recipe.description,
+                    color = AppTheme.colorScheme.onBackground
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -89,7 +91,8 @@ fun RecipeTile(recipe: RecipeItem) {
                     Text(
                         modifier = Modifier,
                         style = AppTheme.typography.body,
-                        text = "Jane Doe"
+                        text = "Jane Doe",
+                        color = AppTheme.colorScheme.primary
                     )
                 }
             }

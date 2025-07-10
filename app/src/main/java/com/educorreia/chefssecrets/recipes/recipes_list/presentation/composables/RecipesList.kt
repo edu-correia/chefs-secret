@@ -27,7 +27,7 @@ fun RecipesList(items: List<RecipeItem>) {
             Column {
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text("My recipes")
+                Text("My recipes", color = AppTheme.colorScheme.primary)
 
                 Spacer(modifier = Modifier.height(16.dp))
             }

@@ -26,7 +26,10 @@ import com.educorreia.chefssecrets.R
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 
 @Composable
-fun Header() {
+fun Header(
+    userFirstName: String?,
+    userPhotoUrl: String?
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -44,12 +47,14 @@ fun Header() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                modifier = Modifier.weight(1f),
-                text = "Welcome back,\nEduardo"
+                modifier = Modifier
+                    .weight(1f),
+                text = "Welcome back,\n${userFirstName}",
+                color = AppTheme.colorScheme.primary
             )
 
             SubcomposeAsyncImage(
-                model = "https://i.imgur.com/R0eBtWi.png",
+                model = userPhotoUrl,
                 contentDescription = null,
                 modifier = Modifier
                     .size(40.dp)
@@ -73,6 +78,9 @@ fun Header() {
 @Composable
 fun HeaderPreview() {
     AppTheme {
-        Header()
+        Header(
+            userFirstName = "John",
+            userPhotoUrl = "https://i.imgur.com/R0eBtWi.png"
+        )
     }
 }

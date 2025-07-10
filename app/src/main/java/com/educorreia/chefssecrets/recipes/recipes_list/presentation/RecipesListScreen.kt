@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.educorreia.chefssecrets.core.data.domain.models.User
 import com.educorreia.chefssecrets.core.ui.composables.InnerScaffold
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 import com.educorreia.chefssecrets.core.ui.theme.SystemBarColor
@@ -24,14 +25,16 @@ fun RecipesListScreenRoot(
     viewModel: RecipesListViewModel = koinViewModel<RecipesListViewModel>(),
 ) {
     val uiState = viewModel.uiState.collectAsState()
+    val currentUser = viewModel.currentUser.collectAsState()
 
-    RecipesListScreen(uiState.value, viewModel::onEvent)
+    RecipesListScreen(uiState.value, viewModel::onEvent, currentUser.value)
 }
 
 @Composable
 fun RecipesListScreen(
     uiState: RecipesListUiState,
-    onEvent: (RecipesListEvent) -> Unit
+    onEvent: (RecipesListEvent) -> Unit,
+    currentUser: User?
 ) {
     SystemBarColor(color = AppTheme.colorScheme.secondary)
 
@@ -50,7 +53,10 @@ fun RecipesListScreen(
                 .fillMaxSize()
                 .background(AppTheme.colorScheme.background)
         ) {
-            Header()
+            Header(
+                userFirstName = currentUser?.getFirstName(),
+                userPhotoUrl = currentUser?.photoUrl
+            )
             RecipesList(uiState.recipesList)
         }
     }
@@ -62,13 +68,20 @@ fun RecipesListScreen(
 fun RecipesListScreenPreview() {
     AppTheme {
         RecipesListScreen(
-            RecipesListUiState(
+            uiState = RecipesListUiState(
                 listOf(
                     RecipeItem(id = "123", title = "Caesar's salad", description = "Lorem ipsum dolor asit met."),
                     RecipeItem(id = "456", title = "Mac & Cheese", description = "Delicious combination of macaroni and parmesan cheese."),
                 )
             ),
-            onEvent = {}
+            onEvent = {},
+            currentUser = User(
+                id = "1234",
+                name = "John Doe",
+                email = "test@mail.com",
+                photoUrl = "987654321",
+                phoneNumber = null
+            )
         )
     }
 }

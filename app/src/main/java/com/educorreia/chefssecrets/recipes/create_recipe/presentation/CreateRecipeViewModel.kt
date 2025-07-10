@@ -3,6 +3,7 @@ package com.educorreia.chefssecrets.recipes.create_recipe.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.educorreia.chefssecrets.R
+import com.educorreia.chefssecrets.core.ui.auth.Authenticator
 import com.educorreia.chefssecrets.core.ui.navigation.Navigator
 import com.educorreia.chefssecrets.core.ui.utils.UiText
 import com.educorreia.chefssecrets.core.ui.utils.UiText.StringResource
@@ -18,7 +19,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class CreateRecipeViewModel(
-    private val navigator: Navigator
+    private val navigator: Navigator,
+    private val authenticator: Authenticator
 ) : ViewModel() {
     private var _uiState = MutableStateFlow(CreateRecipeUiState())
     val uiState = _uiState.asStateFlow()
@@ -42,7 +44,12 @@ class CreateRecipeViewModel(
                     navigator.goBack()
                 }
             }
-            CreateRecipeEvent.Submit -> submit()
+            // CreateRecipeEvent.Submit -> submit()
+            CreateRecipeEvent.Submit -> {
+                viewModelScope.launch {
+                    authenticator.logout()
+                }
+            }
         }
     }
 
