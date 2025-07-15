@@ -69,6 +69,12 @@ dependencies {
     // Firebase Auth
     implementation(libs.bundles.firebase.auth)
 
+    // Retrofit
+    implementation(libs.bundles.retrofit)
+
+    // OkHttp
+    implementation(libs.bundles.okhttp)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
