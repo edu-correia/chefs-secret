@@ -49,8 +49,18 @@ fun RecipesListPreview() {
     AppTheme {
         RecipesList(
             listOf(
-                RecipeItem(id = "123", title = "Caesar's salad", description = "Lorem ipsum dolor asit met."),
-                RecipeItem(id = "456", title = "Mac & Cheese", description = "Delicious combination of macaroni and parmesan cheese."),
+                RecipeItem(
+                    id = "123",
+                    title = "Caesar's salad",
+                    description = "Lorem ipsum dolor asit met.",
+                    photoUrl = "https://i.imgur.com/R0eBtWi.png"
+                ),
+                RecipeItem(
+                    id = "456",
+                    title = "Mac & Cheese",
+                    description = "Delicious combination of macaroni and parmesan cheese.",
+                    photoUrl = "https://i.imgur.com/R0eBtWi.png"
+                ),
             )
         )
     }

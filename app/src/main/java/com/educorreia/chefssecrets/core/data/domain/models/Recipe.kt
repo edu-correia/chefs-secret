@@ -1,6 +1,6 @@
-package com.educorreia.chefssecrets.recipes.common.domain.models
+package com.educorreia.chefssecrets.core.data.domain.models
 
-data class RecipeItem (
+data class Recipe(
     val id: String,
     val title: String,
     val description: String,

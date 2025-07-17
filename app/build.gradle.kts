@@ -22,6 +22,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "FIREBASE_WEB_CLIENT_ID", gradleLocalProperties(rootDir, providers).getProperty("firebaseWebClientId") ?: "")
+        buildConfigField("String", "CLOUD_FUNCTIONS_API_BASE_URL", gradleLocalProperties(rootDir, providers).getProperty("cloudFunctionsAPIBaseUrl") ?: "")
     }
 
     buildTypes {

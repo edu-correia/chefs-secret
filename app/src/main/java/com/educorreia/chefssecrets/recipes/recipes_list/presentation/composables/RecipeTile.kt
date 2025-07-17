@@ -97,7 +97,7 @@ fun RecipeTile(recipe: RecipeItem) {
                 }
             }
             SubcomposeAsyncImage(
-                model = "https://i.imgur.com/4gQNMF3.png",
+                model = recipe.photoUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -125,6 +125,13 @@ fun RecipeTile(recipe: RecipeItem) {
 @Composable
 fun RecipeTilePreview() {
     AppTheme {
-        RecipeTile(RecipeItem(id = "123", title = "Caesar's salad", description = "Lorem ipsum dolor asit met."),)
+        RecipeTile(
+            recipe = RecipeItem(
+                id = "123",
+                title = "Caesar's salad",
+                description = "Lorem ipsum dolor asit met.",
+                photoUrl = "https://i.imgur.com/R0eBtWi.png"
+            ),
+        )
     }
 }
