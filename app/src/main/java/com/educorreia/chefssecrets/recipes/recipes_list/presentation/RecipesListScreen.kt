@@ -12,12 +12,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.educorreia.chefssecrets.core.data.domain.models.User
 import com.educorreia.chefssecrets.core.ui.composables.InnerScaffold
+import com.educorreia.chefssecrets.core.ui.composables.ShimmerContent
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 import com.educorreia.chefssecrets.core.ui.theme.SystemBarColor
 import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeItem
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.Header
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.NewRecipeButton
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.RecipesList
+import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.RecipesTitle
+import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.ShimmerRecipesList
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -57,7 +60,18 @@ fun RecipesListScreen(
                 userFirstName = currentUser?.getFirstName(),
                 userPhotoUrl = currentUser?.photoUrl
             )
-            RecipesList(uiState.recipesList)
+
+            RecipesTitle()
+
+            ShimmerContent(
+                isLoading = uiState.isLoading,
+                contentBeforeLoading = {
+                    ShimmerRecipesList()
+                },
+                contentAfterLoading = {
+                    RecipesList(uiState.recipesList)
+                }
+            )
         }
     }
 }
@@ -69,7 +83,8 @@ fun RecipesListScreenPreview() {
     AppTheme {
         RecipesListScreen(
             uiState = RecipesListUiState(
-                listOf(
+                isLoading = false,
+                recipesList = listOf(
                     RecipeItem(id = "123", title = "Caesar's salad", description = "Lorem ipsum dolor asit met.", photoUrl = "https://i.imgur.com/R0eBtWi.png"),
                     RecipeItem(id = "456", title = "Mac & Cheese", description = "Delicious combination of macaroni and parmesan cheese.", photoUrl = "https://i.imgur.com/R0eBtWi.png"),
                 )

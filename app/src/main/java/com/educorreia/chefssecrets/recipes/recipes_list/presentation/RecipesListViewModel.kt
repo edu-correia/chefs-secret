@@ -18,16 +18,21 @@ class RecipesListViewModel(
     private val navigator: Navigator,
     private val authenticator: Authenticator,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(RecipesListUiState(listOf()))
+    private val _uiState = MutableStateFlow(RecipesListUiState())
     val uiState = _uiState.asStateFlow()
 
     val currentUser: StateFlow<User?> = authenticator.currentUser
 
     init {
+        _uiState.value = _uiState.value.copy(isLoading = true)
+
         viewModelScope.launch {
-            _uiState.value = RecipesListUiState(recipesRepository.getRecipes().map {
-                RecipeItem(it.id, it.title, it.description, it.photoUrl)
-            })
+            _uiState.value = _uiState.value.copy(
+                isLoading = false,
+                recipesList = recipesRepository.getRecipes().map {
+                    RecipeItem(it.id, it.title, it.description, it.photoUrl)
+                }
+            )
         }
     }
 

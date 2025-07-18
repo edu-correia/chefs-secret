@@ -2,14 +2,18 @@ package com.educorreia.chefssecrets.recipes.recipes_list.presentation.composable
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.widget.Space
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -17,21 +21,15 @@ import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeItem
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 
 @Composable
-fun RecipesList(items: List<RecipeItem>) {
+fun RecipesList(
+    items: List<RecipeItem>
+) {
     LazyColumn(
         modifier = Modifier
             .background(AppTheme.colorScheme.background)
-            .padding(vertical = 12.dp, horizontal = 24.dp)
+            .padding(vertical = 12.dp, horizontal = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
-        item {
-            Column {
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text("My recipes", color = AppTheme.colorScheme.primary)
-
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-        }
         items(
             count = items.size,
             key = { items[it].id }
@@ -48,7 +46,7 @@ fun RecipesList(items: List<RecipeItem>) {
 fun RecipesListPreview() {
     AppTheme {
         RecipesList(
-            listOf(
+            items = listOf(
                 RecipeItem(
                     id = "123",
                     title = "Caesar's salad",
@@ -61,7 +59,7 @@ fun RecipesListPreview() {
                     description = "Delicious combination of macaroni and parmesan cheese.",
                     photoUrl = "https://i.imgur.com/R0eBtWi.png"
                 ),
-            )
+            ),
         )
     }
 }

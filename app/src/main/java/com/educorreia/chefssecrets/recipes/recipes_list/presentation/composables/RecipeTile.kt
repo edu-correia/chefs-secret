@@ -35,7 +35,7 @@ import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 fun RecipeTile(recipe: RecipeItem) {
     Box(
         modifier = Modifier
-            .padding(bottom = 24.dp)
+//            .padding(bottom = 24.dp)
             .fillMaxWidth()
             .height(160.dp)
             .shadow(
