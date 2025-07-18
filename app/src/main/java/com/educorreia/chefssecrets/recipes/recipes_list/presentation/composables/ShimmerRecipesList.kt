@@ -18,7 +18,6 @@ fun ShimmerRecipesList(itemCount: Int = 5) {
         modifier = Modifier
             .background(AppTheme.colorScheme.background)
             .padding(vertical = 12.dp, horizontal = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         items(
             count = itemCount,

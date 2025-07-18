@@ -28,7 +28,6 @@ fun RecipesList(
         modifier = Modifier
             .background(AppTheme.colorScheme.background)
             .padding(vertical = 12.dp, horizontal = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         items(
             count = items.size,

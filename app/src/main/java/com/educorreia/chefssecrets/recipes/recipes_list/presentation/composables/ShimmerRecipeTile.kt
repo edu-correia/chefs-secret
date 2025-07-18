@@ -5,6 +5,7 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 fun ShimmerRecipeTile() {
     Box(
         modifier = Modifier
+            .padding(top = 12.dp, bottom = 12.dp)
             .fillMaxWidth()
             .height(160.dp)
             .clip(RoundedCornerShape(4.dp))

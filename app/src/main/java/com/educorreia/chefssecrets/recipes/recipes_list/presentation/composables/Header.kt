@@ -5,8 +5,11 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -30,46 +33,50 @@ fun Header(
     userFirstName: String?,
     userPhotoUrl: String?
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .shadow(
-                8.dp, shape = RoundedCornerShape(
-                    bottomStart = 24.dp,
-                    bottomEnd = 24.dp
-                )
-            )
-            .background(AppTheme.colorScheme.secondary)
-            .padding(24.dp),
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier
-                    .weight(1f),
-                text = "Welcome back,\n${userFirstName}",
-                color = AppTheme.colorScheme.primary
-            )
-
-            SubcomposeAsyncImage(
-                model = userPhotoUrl,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape),
-                error = {
-                    Image(
-                        painter = painterResource(R.drawable.img_user_example),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
+    Column {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .shadow(
+                    8.dp, shape = RoundedCornerShape(
+                        bottomStart = 24.dp,
+                        bottomEnd = 24.dp
                     )
-                }
-            )
+                )
+                .background(AppTheme.colorScheme.secondary)
+                .padding(24.dp),
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier
+                        .weight(1f),
+                    text = "Welcome back,\n${userFirstName}",
+                    color = AppTheme.colorScheme.primary
+                )
+
+                SubcomposeAsyncImage(
+                    model = userPhotoUrl,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape),
+                    error = {
+                        Image(
+                            painter = painterResource(R.drawable.img_user_example),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clip(CircleShape)
+                        )
+                    }
+                )
+            }
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
