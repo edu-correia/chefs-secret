@@ -41,8 +41,7 @@ fun CreateRecipeScreenRoot(
                 is CreateRecipeEffect.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(
                         CustomSnackbarVisuals(
-                            message = effect.message.asString(context),
-                            icon = Icons.Default.Done,
+                            message = effect.message.asString(context)
                         )
                     )
                 }

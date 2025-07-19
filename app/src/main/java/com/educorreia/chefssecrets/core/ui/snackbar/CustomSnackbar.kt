@@ -21,7 +21,7 @@ import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 @Composable
 fun CustomSnackbar(visuals: CustomSnackbarVisuals) {
     Snackbar(
-        containerColor = visuals.containerColor,
+        containerColor = AppTheme.colorScheme.onBackground,
         modifier = Modifier
             .padding(24.dp)
     ) {
@@ -32,14 +32,14 @@ fun CustomSnackbar(visuals: CustomSnackbarVisuals) {
                 Icon(
                     imageVector = visuals.icon,
                     contentDescription = visuals.message,
-                    tint = visuals.iconColor
+                    tint = AppTheme.colorScheme.secondary
                 )
                 Spacer(modifier = Modifier.width(12.dp))
             }
 
             Text(
                 text = visuals.message,
-                color = visuals.textColor
+                color = AppTheme.colorScheme.secondary
             )
         }
     }
@@ -53,10 +53,7 @@ fun RecipesListScreenPreview() {
         CustomSnackbar(
             CustomSnackbarVisuals(
                 message = "Snackbar message",
-                icon = Icons.Default.Done,
-                iconColor = AppTheme.colorScheme.secondary,
-                textColor = AppTheme.colorScheme.secondary,
-                containerColor = AppTheme.colorScheme.onBackground
+                icon = Icons.Default.Done
             )
         )
     }

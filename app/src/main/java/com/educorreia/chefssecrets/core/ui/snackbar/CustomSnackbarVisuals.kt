@@ -13,8 +13,5 @@ data class CustomSnackbarVisuals(
     else SnackbarDuration.Indefinite,
 
     // Custom snackbar properties
-    val icon: ImageVector? = null,
-    val iconColor: Color = Color.White,
-    val textColor: Color = Color.White,
-    val containerColor: Color = Color.Black
+    val icon: ImageVector? = null
 ) : SnackbarVisuals
