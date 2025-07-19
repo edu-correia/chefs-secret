@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
-import com.educorreia.chefssecrets.core.ui.theme.SystemBarColor
 import com.educorreia.chefssecrets.core.ui.navigation.Route.RecipeDetailsRoute
 import org.koin.androidx.compose.koinViewModel
 
@@ -23,11 +22,6 @@ fun RecipeDetailsScreenRoot(
 
 @Composable
 fun RecipeDetailsScreen(uiState: RecipeDetailsUiState, arguments: RecipeDetailsRoute) {
-    SystemBarColor(
-        color = AppTheme.colorScheme.secondary,
-        isLightIcons = false
-    )
-
     Text("TODO: Implement details screen for each of the " +
             "${uiState.test} items")
 }

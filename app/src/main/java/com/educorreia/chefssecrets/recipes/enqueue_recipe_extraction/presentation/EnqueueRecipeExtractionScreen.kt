@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
-import com.educorreia.chefssecrets.core.ui.theme.SystemBarColor
 
 @Composable
 fun EnqueueRecipeExtractionScreenRoot(
@@ -31,8 +30,6 @@ fun EnqueueRecipeExtractionScreen(
     videoLink: String,
     onDismiss: () -> Unit
 ) {
-    SystemBarColor(color = AppTheme.colorScheme.secondary)
-
     Column {
         Spacer(Modifier.height(20.dp))
         Text("Video Link Extracted: $videoLink")

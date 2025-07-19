@@ -21,7 +21,6 @@ import com.educorreia.chefssecrets.core.ui.scaffold.ScaffoldConfiguration
 import com.educorreia.chefssecrets.core.ui.snackbar.CustomSnackbarVisuals
 import com.educorreia.chefssecrets.core.ui.snackbar.LocalSnackbarHostState
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
-import com.educorreia.chefssecrets.core.ui.theme.SystemBarColor
 import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.CustomTextField
 import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.FilledButton
 import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.OutlinedButton
@@ -68,8 +67,6 @@ fun CreateRecipeScreen(
     uiState: CreateRecipeUiState,
     onEvent: (CreateRecipeAction) -> Unit
 ) {
-    SystemBarColor(color = AppTheme.colorScheme.background)
-
     Column (
         modifier = Modifier
             .fillMaxSize()
