@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.educorreia.chefssecrets.core.data.domain.models.User
 import com.educorreia.chefssecrets.core.ui.composables.ShimmerContent
 import com.educorreia.chefssecrets.core.ui.scaffold.LocalScaffoldConfiguration
+import com.educorreia.chefssecrets.core.ui.scaffold.PreviewScaffold
 import com.educorreia.chefssecrets.core.ui.scaffold.ScaffoldConfiguration
 import com.educorreia.chefssecrets.core.ui.scaffold.ScaffoldSetup
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
@@ -81,22 +82,35 @@ fun RecipesListScreen(
 @Composable
 fun RecipesListScreenPreview() {
     AppTheme {
-        RecipesListScreen(
-            uiState = RecipesListUiState(
-                isLoading = false,
-                recipesList = listOf(
-                    RecipeItem(id = "123", title = "Caesar's salad", description = "Lorem ipsum dolor asit met.", photoUrl = "https://i.imgur.com/R0eBtWi.png"),
-                    RecipeItem(id = "456", title = "Mac & Cheese", description = "Delicious combination of macaroni and parmesan cheese.", photoUrl = "https://i.imgur.com/R0eBtWi.png"),
+        PreviewScaffold(
+            topBar = {
+                UserHeader(
+                    userFirstName = "John",
+                    userPhotoUrl = "https://i.imgur.com/R0eBtWi.png"
                 )
-            ),
-            onEvent = {},
-            currentUser = User(
-                id = "1234",
-                name = "John Doe",
-                email = "test@mail.com",
-                photoUrl = "987654321",
-                phoneNumber = null
+            },
+            fab = {
+                NewRecipeButton(onClick = {})
+            },
+            fabPosition = FabPosition.Center
+        ) {
+            RecipesListScreen(
+                uiState = RecipesListUiState(
+                    isLoading = false,
+                    recipesList = listOf(
+                        RecipeItem(id = "123", title = "Caesar's salad", description = "Lorem ipsum dolor asit met.", photoUrl = "https://i.imgur.com/R0eBtWi.png"),
+                        RecipeItem(id = "456", title = "Mac & Cheese", description = "Delicious combination of macaroni and parmesan cheese.", photoUrl = "https://i.imgur.com/R0eBtWi.png"),
+                    )
+                ),
+                onEvent = {},
+                currentUser = User(
+                    id = "1234",
+                    name = "John Doe",
+                    email = "test@mail.com",
+                    photoUrl = "987654321",
+                    phoneNumber = null
+                )
             )
-        )
+        }
     }
 }

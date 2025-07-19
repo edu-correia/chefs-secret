@@ -127,9 +127,18 @@ fun CreateRecipeScreen(
 @Composable
 fun CreateRecipeScreenPreview() {
     AppTheme {
-        CreateRecipeScreen(
-            uiState = CreateRecipeUiState("Mac & Cheese"),
-            onEvent = {}
-        )
+        PreviewScaffold(
+            topBar = {
+                GoBackHeader(
+                    onGoBack = {},
+                    text = "Create Recipe"
+                )
+            }
+        ) {
+            CreateRecipeScreen(
+                uiState = CreateRecipeUiState("Mac & Cheese"),
+                onEvent = {}
+            )
+        }
     }
 }
