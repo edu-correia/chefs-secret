@@ -59,7 +59,7 @@ fun CreateRecipeScreenRoot(
         topBar = {
             GoBackHeader(
                 onGoBack = { viewModel.onEvent(CreateRecipeAction.GoBack) },
-                text = "Create Recipe"
+                text = "Create recipe"
             )
         }
     )
@@ -131,7 +131,7 @@ fun CreateRecipeScreenPreview() {
             topBar = {
                 GoBackHeader(
                     onGoBack = {},
-                    text = "Create Recipe"
+                    text = "Create recipe"
                 )
             }
         ) {

@@ -4,6 +4,7 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,11 +29,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
 import com.educorreia.chefssecrets.R
-import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeItem
+import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeUIModel
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
+import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeSummaryUIModel
 
 @Composable
-fun RecipeTile(recipe: RecipeItem) {
+fun RecipeTile(
+    recipe: RecipeSummaryUIModel,
+    onClick: () -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .padding(top = 12.dp, bottom = 12.dp)
@@ -43,6 +48,9 @@ fun RecipeTile(recipe: RecipeItem) {
                 shape = RoundedCornerShape(4.dp)
             )
             .background(AppTheme.colorScheme.secondary)
+            .clickable {
+                onClick()
+            },
     ) {
         Row {
             Column(
@@ -126,11 +134,12 @@ fun RecipeTile(recipe: RecipeItem) {
 fun RecipeTilePreview() {
     AppTheme {
         RecipeTile(
-            recipe = RecipeItem(
+            recipe = RecipeSummaryUIModel(
                 id = "123",
                 title = "Caesar's salad",
                 description = "Lorem ipsum dolor asit met.",
-                photoUrl = "https://i.imgur.com/R0eBtWi.png"
+                photoUrl = "https://i.imgur.com/R0eBtWi.png",
+                null
             ),
         )
     }

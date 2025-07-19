@@ -6,8 +6,9 @@ import com.educorreia.chefssecrets.core.data.domain.interfaces.RecipesRepository
 import com.educorreia.chefssecrets.core.data.domain.models.User
 import com.educorreia.chefssecrets.core.ui.auth.Authenticator
 import com.educorreia.chefssecrets.core.ui.navigation.Navigator
-import com.educorreia.chefssecrets.core.ui.navigation.Route.CreateRecipeRoute
-import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeItem
+import com.educorreia.chefssecrets.core.ui.navigation.Route
+import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeSummaryUIModel
+import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeUIModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,17 +31,23 @@ class RecipesListViewModel(
             _uiState.value = _uiState.value.copy(
                 isLoading = false,
                 recipesList = recipesRepository.getRecipes().map {
-                    RecipeItem(it.id, it.title, it.description, it.photoUrl)
+                    RecipeSummaryUIModel(it.id, it.title, it.description, it.photoUrl, null)
                 }
             )
         }
     }
 
-    fun onEvent(event: RecipesListEvent) {
+    fun onEvent(event: RecipesListAction) {
         when (event) {
-            is RecipesListEvent.GoToCreateRecipePage -> {
+            is RecipesListAction.GoToCreateRecipePage -> {
                 viewModelScope.launch {
-                    navigator.navigate(CreateRecipeRoute)
+                    navigator.navigate(Route.CreateRecipeRoute)
+                }
+            }
+            is RecipesListAction.GoToRecipeDetailsPage -> {
+                val id = event.id
+                viewModelScope.launch {
+                    navigator.navigate(Route.RecipeDetailsRoute(id))
                 }
             }
         }

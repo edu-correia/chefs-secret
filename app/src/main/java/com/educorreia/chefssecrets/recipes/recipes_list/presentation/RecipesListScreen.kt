@@ -7,19 +7,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.FabPosition
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.educorreia.chefssecrets.core.data.domain.models.User
 import com.educorreia.chefssecrets.core.ui.composables.ShimmerContent
-import com.educorreia.chefssecrets.core.ui.scaffold.LocalScaffoldConfiguration
 import com.educorreia.chefssecrets.core.ui.scaffold.PreviewScaffold
-import com.educorreia.chefssecrets.core.ui.scaffold.ScaffoldConfiguration
 import com.educorreia.chefssecrets.core.ui.scaffold.ScaffoldSetup
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
-import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeItem
+import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeSummaryUIModel
+import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeUIModel
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.UserHeader
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.NewRecipeButton
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.RecipesList
@@ -43,7 +40,7 @@ fun RecipesListScreenRoot(
         },
         floatingActionButton = {
             NewRecipeButton(onClick = {
-                viewModel.onEvent(RecipesListEvent.GoToCreateRecipePage)
+                viewModel.onEvent(RecipesListAction.GoToCreateRecipePage)
             })
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -55,7 +52,7 @@ fun RecipesListScreenRoot(
 @Composable
 fun RecipesListScreen(
     uiState: RecipesListUiState,
-    onEvent: (RecipesListEvent) -> Unit,
+    onEvent: (RecipesListAction) -> Unit,
     currentUser: User?
 ) {
     Column(
@@ -71,7 +68,12 @@ fun RecipesListScreen(
                 ShimmerRecipesList()
             },
             contentAfterLoading = {
-                RecipesList(uiState.recipesList)
+                RecipesList(
+                    items = uiState.recipesList,
+                    onClick = { id ->
+                        onEvent.invoke(RecipesListAction.GoToRecipeDetailsPage(id))
+                    }
+                )
             }
         )
     }
@@ -98,8 +100,8 @@ fun RecipesListScreenPreview() {
                 uiState = RecipesListUiState(
                     isLoading = false,
                     recipesList = listOf(
-                        RecipeItem(id = "123", title = "Caesar's salad", description = "Lorem ipsum dolor asit met.", photoUrl = "https://i.imgur.com/R0eBtWi.png"),
-                        RecipeItem(id = "456", title = "Mac & Cheese", description = "Delicious combination of macaroni and parmesan cheese.", photoUrl = "https://i.imgur.com/R0eBtWi.png"),
+                        RecipeSummaryUIModel(id = "123", title = "Caesar's salad", description = "Lorem ipsum dolor asit met.", photoUrl = "https://i.imgur.com/R0eBtWi.png", null),
+                        RecipeSummaryUIModel(id = "456", title = "Mac & Cheese", description = "Delicious combination of macaroni and parmesan cheese.", photoUrl = "https://i.imgur.com/R0eBtWi.png", null),
                     )
                 ),
                 onEvent = {},

@@ -2,27 +2,21 @@ package com.educorreia.chefssecrets.recipes.recipes_list.presentation.composable
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.widget.Space
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeItem
+import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeUIModel
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
+import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeSummaryUIModel
 
 @Composable
 fun RecipesList(
-    items: List<RecipeItem>
+    items: List<RecipeSummaryUIModel>,
+    onClick: (String) -> Unit = {}
 ) {
     LazyColumn(
         modifier = Modifier
@@ -34,7 +28,12 @@ fun RecipesList(
             key = { items[it].id }
         ) { index ->
             val recipe = items[index]
-            RecipeTile(recipe)
+            RecipeTile(
+                recipe = recipe,
+                onClick = {
+                    onClick(recipe.id)
+                }
+            )
         }
     }
 }
@@ -46,17 +45,19 @@ fun RecipesListPreview() {
     AppTheme {
         RecipesList(
             items = listOf(
-                RecipeItem(
+                RecipeSummaryUIModel(
                     id = "123",
                     title = "Caesar's salad",
                     description = "Lorem ipsum dolor asit met.",
-                    photoUrl = "https://i.imgur.com/R0eBtWi.png"
+                    photoUrl = "https://i.imgur.com/R0eBtWi.png",
+                    null
                 ),
-                RecipeItem(
+                RecipeSummaryUIModel(
                     id = "456",
                     title = "Mac & Cheese",
                     description = "Delicious combination of macaroni and parmesan cheese.",
-                    photoUrl = "https://i.imgur.com/R0eBtWi.png"
+                    photoUrl = "https://i.imgur.com/R0eBtWi.png",
+                    null
                 ),
             ),
         )
