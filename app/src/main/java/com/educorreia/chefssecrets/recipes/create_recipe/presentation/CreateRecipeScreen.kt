@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -18,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.educorreia.chefssecrets.core.ui.scaffold.LocalScaffoldConfiguration
+import com.educorreia.chefssecrets.core.ui.scaffold.ScaffoldConfiguration
 import com.educorreia.chefssecrets.core.ui.snackbar.CustomSnackbarVisuals
 import com.educorreia.chefssecrets.core.ui.snackbar.LocalSnackbarHostState
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
@@ -32,6 +32,7 @@ fun CreateRecipeScreenRoot(
     viewModel: CreateRecipeViewModel = koinViewModel<CreateRecipeViewModel>()
 ) {
     val uiState = viewModel.uiState.collectAsState()
+
     val context = LocalContext.current
     val snackbarHostState = LocalSnackbarHostState.current
 
@@ -47,6 +48,13 @@ fun CreateRecipeScreenRoot(
                 }
             }
         }
+    }
+
+    val setScaffoldConfiguration = LocalScaffoldConfiguration.current
+    LaunchedEffect(Unit) {
+        setScaffoldConfiguration(
+            ScaffoldConfiguration()
+        )
     }
 
     CreateRecipeScreen(

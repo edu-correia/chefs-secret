@@ -4,15 +4,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,10 +28,11 @@ import com.educorreia.chefssecrets.core.ui.navigation.Route.CreateRecipeRoute
 import com.educorreia.chefssecrets.core.ui.navigation.Route.LoginRoute
 import com.educorreia.chefssecrets.core.ui.navigation.Route.RecipeDetailsRoute
 import com.educorreia.chefssecrets.core.ui.navigation.Route.RecipesListRoute
+import com.educorreia.chefssecrets.core.ui.scaffold.LocalScaffoldConfiguration
+import com.educorreia.chefssecrets.core.ui.scaffold.ScaffoldConfiguration
 import com.educorreia.chefssecrets.core.ui.snackbar.CustomSnackbar
 import com.educorreia.chefssecrets.core.ui.snackbar.CustomSnackbarVisuals
 import com.educorreia.chefssecrets.core.ui.snackbar.LocalSnackbarHostState
-import com.educorreia.chefssecrets.core.ui.snackbar.SnackbarSetup
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 import com.educorreia.chefssecrets.login.presentation.LoginScreenRoot
 import com.educorreia.chefssecrets.recipes.create_recipe.presentation.CreateRecipeScreenRoot
@@ -47,31 +49,37 @@ class MainActivity : ComponentActivity() {
                 val scope = rememberCoroutineScope()
                 val snackbarHostState = remember { SnackbarHostState() }
 
-                SnackbarSetup(snackbarHostState, scope)
+                var scaffoldConfig by remember { mutableStateOf(ScaffoldConfiguration()) }
+                val setScaffoldConfiguration: (ScaffoldConfiguration) -> Unit = {scaffoldConfig = it}
 
                 CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
-                    Box(Modifier.safeDrawingPadding()) {
-                        Scaffold(
-                            snackbarHost = {
-                                SnackbarHost(hostState = snackbarHostState) { data ->
-                                    val visuals = data.visuals as CustomSnackbarVisuals
-                                    CustomSnackbar(visuals)
-                                }
-                            },
-                        ) { pad ->
-                            val navController = rememberNavController()
+                    Scaffold(
+                        snackbarHost = {
+                            SnackbarHost(hostState = snackbarHostState) { data ->
+                                val visuals = data.visuals as CustomSnackbarVisuals
+                                CustomSnackbar(visuals)
+                            }
+                        },
+                        topBar = scaffoldConfig.topBar,
+                        floatingActionButton = scaffoldConfig.floatingActionButton,
+                        floatingActionButtonPosition = scaffoldConfig.floatingActionButtonPosition
+                    ) { pad ->
+                        val navController = rememberNavController()
 
-                            val navigator = koinInject<Navigator>()
-                            val authenticator = koinInject<Authenticator>()
-                            val userAuthService = koinInject<UserAuthService>()
+                        val navigator = koinInject<Navigator>()
+                        val authenticator = koinInject<Authenticator>()
+                        val userAuthService = koinInject<UserAuthService>()
 
-                            LoginSetup(authenticator, userAuthService, navigator, scope)
-                            NavigatorSetup(navigator, navController)
+                        LoginSetup(authenticator, userAuthService, navigator, scope)
+                        NavigatorSetup(navigator, navController)
 
+                        CompositionLocalProvider(
+                            LocalScaffoldConfiguration provides setScaffoldConfiguration
+                        ) {
                             NavHost(
                                 navController = navController,
                                 startDestination = navigator.startDestination,
-                                modifier = Modifier.padding(pad)
+                                modifier = Modifier.padding(pad),
                             ) {
                                 composable<RecipesListRoute> {
                                     RecipesListScreenRoot()
@@ -91,6 +99,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }
+
                     }
                 }
             }

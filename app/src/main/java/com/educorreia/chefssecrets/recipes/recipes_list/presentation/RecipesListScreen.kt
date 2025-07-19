@@ -7,14 +7,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.FabPosition
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.educorreia.chefssecrets.core.data.domain.models.User
-import com.educorreia.chefssecrets.core.ui.composables.InnerScaffold
 import com.educorreia.chefssecrets.core.ui.composables.ShimmerContent
+import com.educorreia.chefssecrets.core.ui.scaffold.LocalScaffoldConfiguration
+import com.educorreia.chefssecrets.core.ui.scaffold.ScaffoldConfiguration
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
-import com.educorreia.chefssecrets.core.ui.theme.SystemBarColor
 import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeItem
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.Header
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.NewRecipeButton
@@ -30,6 +32,33 @@ fun RecipesListScreenRoot(
     val uiState = viewModel.uiState.collectAsState()
     val currentUser = viewModel.currentUser.collectAsState()
 
+    val setScaffoldConfiguration = LocalScaffoldConfiguration.current
+
+    LaunchedEffect(currentUser) {
+        setScaffoldConfiguration(
+            ScaffoldConfiguration(
+                topBar = {
+                    Header(
+                        userFirstName = currentUser.value?.getFirstName(),
+                        userPhotoUrl = currentUser.value?.photoUrl
+                    )
+                },
+                floatingActionButton = {
+                    NewRecipeButton(onClick = {
+                        viewModel.onEvent(RecipesListEvent.GoToCreateRecipePage)
+                    })
+                },
+                floatingActionButtonPosition = FabPosition.Center
+            )
+        )
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            setScaffoldConfiguration(ScaffoldConfiguration())
+        }
+    }
+
     RecipesListScreen(uiState.value, viewModel::onEvent, currentUser.value)
 }
 
@@ -39,40 +68,22 @@ fun RecipesListScreen(
     onEvent: (RecipesListEvent) -> Unit,
     currentUser: User?
 ) {
-    SystemBarColor(color = AppTheme.colorScheme.secondary)
-
-    InnerScaffold (
-        floatingActionButtonPosition = FabPosition.Center,
-        floatingActionButton = {
-            NewRecipeButton (
-                onClick = {
-                    onEvent(RecipesListEvent.GoToCreateRecipePage)
-                }
-            )
-        }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(AppTheme.colorScheme.background)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(AppTheme.colorScheme.background)
-        ) {
-            Header(
-                userFirstName = currentUser?.getFirstName(),
-                userPhotoUrl = currentUser?.photoUrl
-            )
+        RecipesTitle()
 
-            RecipesTitle()
-
-            ShimmerContent(
-                isLoading = uiState.isLoading,
-                contentBeforeLoading = {
-                    ShimmerRecipesList()
-                },
-                contentAfterLoading = {
-                    RecipesList(uiState.recipesList)
-                }
-            )
-        }
+        ShimmerContent(
+            isLoading = uiState.isLoading,
+            contentBeforeLoading = {
+                ShimmerRecipesList()
+            },
+            contentAfterLoading = {
+                RecipesList(uiState.recipesList)
+            }
+        )
     }
 }
 
