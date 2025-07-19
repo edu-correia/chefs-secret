@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -28,6 +29,7 @@ import com.educorreia.chefssecrets.core.ui.navigation.Route.CreateRecipeRoute
 import com.educorreia.chefssecrets.core.ui.navigation.Route.LoginRoute
 import com.educorreia.chefssecrets.core.ui.navigation.Route.RecipeDetailsRoute
 import com.educorreia.chefssecrets.core.ui.navigation.Route.RecipesListRoute
+import com.educorreia.chefssecrets.core.ui.scaffold.IGNORE_WINDOW_INSETS
 import com.educorreia.chefssecrets.core.ui.scaffold.LocalScaffoldConfiguration
 import com.educorreia.chefssecrets.core.ui.scaffold.ScaffoldConfiguration
 import com.educorreia.chefssecrets.core.ui.snackbar.CustomSnackbar
@@ -54,6 +56,7 @@ class MainActivity : ComponentActivity() {
 
                 CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
                     Scaffold(
+                        contentWindowInsets = IGNORE_WINDOW_INSETS,
                         snackbarHost = {
                             SnackbarHost(hostState = snackbarHostState) { data ->
                                 val visuals = data.visuals as CustomSnackbarVisuals
@@ -63,7 +66,7 @@ class MainActivity : ComponentActivity() {
                         topBar = scaffoldConfig.topBar,
                         floatingActionButton = scaffoldConfig.floatingActionButton,
                         floatingActionButtonPosition = scaffoldConfig.floatingActionButtonPosition
-                    ) { pad ->
+                    ) { innerPadding ->
                         val navController = rememberNavController()
 
                         val navigator = koinInject<Navigator>()
@@ -79,7 +82,9 @@ class MainActivity : ComponentActivity() {
                             NavHost(
                                 navController = navController,
                                 startDestination = navigator.startDestination,
-                                modifier = Modifier.padding(pad),
+                                modifier = Modifier
+                                    .padding(innerPadding)
+                                    .consumeWindowInsets(innerPadding)
                             ) {
                                 composable<RecipesListRoute> {
                                     RecipesListScreenRoot()
