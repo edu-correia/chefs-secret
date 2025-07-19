@@ -13,7 +13,9 @@ import com.educorreia.chefssecrets.recipes.create_recipe.domain.use_cases.Valida
 import com.educorreia.chefssecrets.recipes.create_recipe.domain.use_cases.ValidateRecipeImageUrl
 import com.educorreia.chefssecrets.recipes.create_recipe.domain.use_cases.ValidateRecipeName
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -28,28 +30,26 @@ class CreateRecipeViewModel(
     private val validationErrorChannel = Channel<UiText>()
     val validationError = validationErrorChannel.receiveAsFlow()
 
-    fun onEvent(event: CreateRecipeEvent) {
+    private val _effect = MutableSharedFlow<CreateRecipeEffect>()
+    val effect = _effect.asSharedFlow()
+
+    fun onEvent(event: CreateRecipeAction) {
         when (event) {
-            is CreateRecipeEvent.NameChanged -> {
+            is CreateRecipeAction.NameChanged -> {
                 _uiState.value = _uiState.value.copy(name = event.name)
             }
-            is CreateRecipeEvent.DescriptionChanged -> {
+            is CreateRecipeAction.DescriptionChanged -> {
                 _uiState.value = _uiState.value.copy(description = event.description)
             }
-            is CreateRecipeEvent.ImageUrlChanged -> {
+            is CreateRecipeAction.ImageUrlChanged -> {
                 _uiState.value = _uiState.value.copy(image = event.imageUrl)
             }
-            is CreateRecipeEvent.GoBack -> {
+            is CreateRecipeAction.GoBack -> {
                 viewModelScope.launch {
                     navigator.goBack()
                 }
             }
-            // CreateRecipeEvent.Submit -> submit()
-            CreateRecipeEvent.Submit -> {
-                viewModelScope.launch {
-                    authenticator.logout()
-                }
-            }
+            CreateRecipeAction.Submit -> submit()
         }
     }
 
@@ -80,7 +80,7 @@ class CreateRecipeViewModel(
             }
 
             viewModelScope.launch {
-                validationErrorChannel.send(errorMessage)
+                _effect.emit(CreateRecipeEffect.ShowSnackbar(errorMessage))
             }
         }
     }

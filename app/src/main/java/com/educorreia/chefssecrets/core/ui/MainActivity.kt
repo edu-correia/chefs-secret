@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -28,6 +29,7 @@ import com.educorreia.chefssecrets.core.ui.navigation.Route.RecipeDetailsRoute
 import com.educorreia.chefssecrets.core.ui.navigation.Route.RecipesListRoute
 import com.educorreia.chefssecrets.core.ui.snackbar.CustomSnackbar
 import com.educorreia.chefssecrets.core.ui.snackbar.CustomSnackbarVisuals
+import com.educorreia.chefssecrets.core.ui.snackbar.LocalSnackbarHostState
 import com.educorreia.chefssecrets.core.ui.snackbar.SnackbarSetup
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 import com.educorreia.chefssecrets.login.presentation.LoginScreenRoot
@@ -47,44 +49,46 @@ class MainActivity : ComponentActivity() {
 
                 SnackbarSetup(snackbarHostState, scope)
 
-                Box(Modifier.safeDrawingPadding()) {
-                    Scaffold (
-                        snackbarHost = {
-                            SnackbarHost(hostState = snackbarHostState) { data ->
-                                val visuals = data.visuals as CustomSnackbarVisuals
-                                CustomSnackbar(visuals)
-                            }
-                        },
-                    ) { pad ->
-                        val navController = rememberNavController()
+                CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
+                    Box(Modifier.safeDrawingPadding()) {
+                        Scaffold(
+                            snackbarHost = {
+                                SnackbarHost(hostState = snackbarHostState) { data ->
+                                    val visuals = data.visuals as CustomSnackbarVisuals
+                                    CustomSnackbar(visuals)
+                                }
+                            },
+                        ) { pad ->
+                            val navController = rememberNavController()
 
-                        val navigator = koinInject<Navigator>()
-                        val authenticator = koinInject<Authenticator>()
-                        val userAuthService = koinInject<UserAuthService>()
+                            val navigator = koinInject<Navigator>()
+                            val authenticator = koinInject<Authenticator>()
+                            val userAuthService = koinInject<UserAuthService>()
 
-                        LoginSetup(authenticator, userAuthService, navigator, scope)
-                        NavigatorSetup(navigator, navController)
+                            LoginSetup(authenticator, userAuthService, navigator, scope)
+                            NavigatorSetup(navigator, navController)
 
-                        NavHost(
-                            navController = navController,
-                            startDestination = navigator.startDestination,
-                            modifier = Modifier.padding(pad)
-                        ) {
-                            composable<RecipesListRoute> {
-                                RecipesListScreenRoot()
-                            }
+                            NavHost(
+                                navController = navController,
+                                startDestination = navigator.startDestination,
+                                modifier = Modifier.padding(pad)
+                            ) {
+                                composable<RecipesListRoute> {
+                                    RecipesListScreenRoot()
+                                }
 
-                            composable<RecipeDetailsRoute> {
-                                val args = it.toRoute<RecipeDetailsRoute>()
-                                RecipeDetailsScreenRoot(arguments = args)
-                            }
+                                composable<RecipeDetailsRoute> {
+                                    val args = it.toRoute<RecipeDetailsRoute>()
+                                    RecipeDetailsScreenRoot(arguments = args)
+                                }
 
-                            composable<CreateRecipeRoute> {
-                                CreateRecipeScreenRoot()
-                            }
+                                composable<CreateRecipeRoute> {
+                                    CreateRecipeScreenRoot()
+                                }
 
-                            composable<LoginRoute> {
-                                LoginScreenRoot()
+                                composable<LoginRoute> {
+                                    LoginScreenRoot()
+                                }
                             }
                         }
                     }

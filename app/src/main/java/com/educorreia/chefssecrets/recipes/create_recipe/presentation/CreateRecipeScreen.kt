@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -16,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.educorreia.chefssecrets.core.ui.snackbar.SnackbarController
-import com.educorreia.chefssecrets.core.ui.snackbar.SnackbarEvent
+import com.educorreia.chefssecrets.core.ui.snackbar.CustomSnackbarVisuals
+import com.educorreia.chefssecrets.core.ui.snackbar.LocalSnackbarHostState
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 import com.educorreia.chefssecrets.core.ui.theme.SystemBarColor
 import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.CustomTextField
@@ -30,11 +32,21 @@ fun CreateRecipeScreenRoot(
     viewModel: CreateRecipeViewModel = koinViewModel<CreateRecipeViewModel>()
 ) {
     val uiState = viewModel.uiState.collectAsState()
-
     val context = LocalContext.current
+    val snackbarHostState = LocalSnackbarHostState.current
+
     LaunchedEffect(true) {
-        viewModel.validationError.collect { uiText ->
-            SnackbarController.sendEvent(SnackbarEvent(uiText.asString(context)))
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is CreateRecipeEffect.ShowSnackbar -> {
+                    snackbarHostState.showSnackbar(
+                        CustomSnackbarVisuals(
+                            message = effect.message.asString(context),
+                            icon = Icons.Default.Done,
+                        )
+                    )
+                }
+            }
         }
     }
 
@@ -47,7 +59,7 @@ fun CreateRecipeScreenRoot(
 @Composable
 fun CreateRecipeScreen(
     uiState: CreateRecipeUiState,
-    onEvent: (CreateRecipeEvent) -> Unit
+    onEvent: (CreateRecipeAction) -> Unit
 ) {
     SystemBarColor(color = AppTheme.colorScheme.background)
 
@@ -61,7 +73,7 @@ fun CreateRecipeScreen(
             label = "Recipe name",
             value = uiState.name,
             onChange = { value ->
-                onEvent(CreateRecipeEvent.NameChanged(value))
+                onEvent(CreateRecipeAction.NameChanged(value))
             }
         )
 
@@ -71,7 +83,7 @@ fun CreateRecipeScreen(
             label = "Recipe description",
             value = uiState.description,
             onChange = { value ->
-                onEvent(CreateRecipeEvent.DescriptionChanged(value))
+                onEvent(CreateRecipeAction.DescriptionChanged(value))
             }
         )
 
@@ -81,7 +93,7 @@ fun CreateRecipeScreen(
             label = "Recipe image URL",
             value = uiState.image,
             onChange = { value ->
-                onEvent(CreateRecipeEvent.ImageUrlChanged(value))
+                onEvent(CreateRecipeAction.ImageUrlChanged(value))
             }
         )
 
@@ -91,7 +103,7 @@ fun CreateRecipeScreen(
             OutlinedButton(
                 text = "Cancel",
                 onClick = {
-                    onEvent(CreateRecipeEvent.GoBack)
+                    onEvent(CreateRecipeAction.GoBack)
                 },
                 modifier = Modifier.weight(1f)
             )
@@ -99,7 +111,7 @@ fun CreateRecipeScreen(
             FilledButton(
                 text = "Create",
                 onClick = {
-                    onEvent(CreateRecipeEvent.Submit)
+                    onEvent(CreateRecipeAction.Submit)
                 },
                 modifier = Modifier.weight(1f)
             )
