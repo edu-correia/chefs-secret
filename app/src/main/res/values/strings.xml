@@ -6,4 +6,5 @@
     <string name="error_recipe_image_url_empty">Recipe image URL can\'t be empty</string>
     <string name="error_recipe_image_url_invalid_link">Recipe image URL\'s link is invalid</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="go_back">Go back\n</string>
 </resources>

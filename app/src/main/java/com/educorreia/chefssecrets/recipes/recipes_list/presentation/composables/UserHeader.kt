@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -32,7 +31,7 @@ import com.educorreia.chefssecrets.R
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 
 @Composable
-fun Header(
+fun UserHeader(
     userFirstName: String?,
     userPhotoUrl: String?
 ) {
@@ -91,9 +90,9 @@ fun Header(
 @Preview(uiMode = UI_MODE_NIGHT_NO, showBackground = true)
 @Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun HeaderPreview() {
+fun UserHeaderPreview() {
     AppTheme {
-        Header(
+        UserHeader(
             userFirstName = "John",
             userPhotoUrl = "https://i.imgur.com/R0eBtWi.png"
         )

@@ -16,9 +16,10 @@ import com.educorreia.chefssecrets.core.data.domain.models.User
 import com.educorreia.chefssecrets.core.ui.composables.ShimmerContent
 import com.educorreia.chefssecrets.core.ui.scaffold.LocalScaffoldConfiguration
 import com.educorreia.chefssecrets.core.ui.scaffold.ScaffoldConfiguration
+import com.educorreia.chefssecrets.core.ui.scaffold.ScaffoldSetup
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeItem
-import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.Header
+import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.UserHeader
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.NewRecipeButton
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.RecipesList
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.RecipesTitle
@@ -32,32 +33,20 @@ fun RecipesListScreenRoot(
     val uiState = viewModel.uiState.collectAsState()
     val currentUser = viewModel.currentUser.collectAsState()
 
-    val setScaffoldConfiguration = LocalScaffoldConfiguration.current
-
-    LaunchedEffect(currentUser) {
-        setScaffoldConfiguration(
-            ScaffoldConfiguration(
-                topBar = {
-                    Header(
-                        userFirstName = currentUser.value?.getFirstName(),
-                        userPhotoUrl = currentUser.value?.photoUrl
-                    )
-                },
-                floatingActionButton = {
-                    NewRecipeButton(onClick = {
-                        viewModel.onEvent(RecipesListEvent.GoToCreateRecipePage)
-                    })
-                },
-                floatingActionButtonPosition = FabPosition.Center
+    ScaffoldSetup(
+        topBar = {
+            UserHeader(
+                userFirstName = currentUser.value?.getFirstName(),
+                userPhotoUrl = currentUser.value?.photoUrl
             )
-        )
-    }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            setScaffoldConfiguration(ScaffoldConfiguration())
-        }
-    }
+        },
+        floatingActionButton = {
+            NewRecipeButton(onClick = {
+                viewModel.onEvent(RecipesListEvent.GoToCreateRecipePage)
+            })
+        },
+        floatingActionButtonPosition = FabPosition.Center
+    )
 
     RecipesListScreen(uiState.value, viewModel::onEvent, currentUser.value)
 }

@@ -3,6 +3,7 @@ package com.educorreia.chefssecrets.recipes.create_recipe.presentation.composabl
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,8 +25,8 @@ fun OutlinedButton(
 ) {
     Button(
         modifier = modifier
+            .fillMaxWidth()
             .height(40.dp)
-            .padding(end = 8.dp)
             .border(
                 width = 1.dp,
                 color = AppTheme.colorScheme.primary,
