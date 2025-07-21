@@ -37,18 +37,28 @@ private val darkColorTheme = AppColorScheme(
 private val typography = AppTypography(
     body = TextStyle(
         fontFamily = AgdasimaFont,
-        fontSize = 16.sp,
+        fontSize = 18.sp,
         fontWeight = FontWeight.Normal
     ),
-    titleLarge = TextStyle(
+    bodySmall = TextStyle(
         fontFamily = AgdasimaFont,
-        fontSize = 20.sp,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Normal,
+    ),
+    titleLarge = TextStyle(
+        fontFamily = AclonicaFont,
+        fontSize = 24.sp,
         fontWeight = FontWeight.Bold
     ),
     titleNormal = TextStyle(
         fontFamily = AclonicaFont,
         fontSize = 16.sp,
         fontWeight = FontWeight.Normal
+    ),
+    titleSmall = TextStyle(
+        fontFamily = AgdasimaFont,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold
     ),
     labelNormal = TextStyle(
         fontFamily = AgdasimaFont,
