@@ -1,13 +1,13 @@
-package com.educorreia.chefssecrets.recipes.recipe_details.presentation.composables
+package com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,26 +20,26 @@ import com.educorreia.chefssecrets.R
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 
 @Composable
-fun SmallRecipeInfo(
-    label: String,
-    @DrawableRes iconDrawable: Int,
+fun SubtopicTitle(
+    title: String,
+    @DrawableRes iconDrawableRes: Int
 ) {
-    Column (
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    Row(
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(iconDrawable),
+            painter = painterResource(iconDrawableRes),
             modifier = Modifier.size(28.dp),
             tint = AppTheme.colorScheme.primary,
             contentDescription = null
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(Modifier.width(8.dp))
 
         Text(
-            text = label,
-            style = AppTheme.typography.body,
+            text = title,
+            style = AppTheme.typography.titleSmall,
             color = AppTheme.colorScheme.primary
         )
     }
@@ -48,11 +48,11 @@ fun SmallRecipeInfo(
 @Preview(uiMode = UI_MODE_NIGHT_NO, showBackground = true)
 @Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun SmallRecipeInfoPreview() {
+fun SubtopicTitlePreview() {
     AppTheme {
-        SmallRecipeInfo(
-            label = "30 min",
-            iconDrawable = R.drawable.ic_clock
+        SubtopicTitle(
+            title = "Ingredients",
+            iconDrawableRes = R.drawable.ic_carrot
         )
     }
 }

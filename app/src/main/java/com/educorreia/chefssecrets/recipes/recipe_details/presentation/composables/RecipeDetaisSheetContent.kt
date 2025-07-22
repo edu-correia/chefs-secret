@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -17,6 +19,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +35,9 @@ import com.educorreia.chefssecrets.R
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeUIModel
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.BOTTOM_SHEET_MIN_HEIGHT
+import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.SubtopicTitle
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RecipeDetaisSheetContent(
     recipe: RecipeUIModel?,
@@ -93,25 +99,10 @@ fun RecipeDetaisSheetContent(
 
             Spacer(Modifier.height(24.dp))
 
-            Row(
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_carrot),
-                    modifier = Modifier.size(28.dp),
-                    tint = AppTheme.colorScheme.primary,
-                    contentDescription = null
-                )
-
-                Spacer(Modifier.width(8.dp))
-
-                Text(
-                    text = "Ingredients:",
-                    style = AppTheme.typography.titleSmall,
-                    color = AppTheme.colorScheme.primary
-                )
-            }
+            SubtopicTitle(
+                title = "Ingredients:",
+                iconDrawableRes = R.drawable.ic_carrot
+            )
 
             Spacer(Modifier.height(8.dp))
 
@@ -128,25 +119,10 @@ fun RecipeDetaisSheetContent(
 
             Spacer(Modifier.height(24.dp))
 
-            Row(
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_cooking_pot),
-                    modifier = Modifier.size(28.dp),
-                    tint = AppTheme.colorScheme.primary,
-                    contentDescription = null
-                )
-
-                Spacer(Modifier.width(8.dp))
-
-                Text(
-                    text = "Cooking instructions:",
-                    style = AppTheme.typography.titleSmall,
-                    color = AppTheme.colorScheme.primary
-                )
-            }
+            SubtopicTitle(
+                title = "Cooking instructions:",
+                iconDrawableRes = R.drawable.ic_cooking_pot
+            )
 
             Spacer(Modifier.height(8.dp))
 
@@ -161,7 +137,30 @@ fun RecipeDetaisSheetContent(
                 style = AppTheme.typography.body.copy(color = AppTheme.colorScheme.onBackground),
             )
 
-            // TODO: Add tags
+            Spacer(Modifier.height(24.dp))
+
+            SubtopicTitle(
+                title = "Tags:",
+                iconDrawableRes = R.drawable.ic_tags
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                for (i in 1..9) {
+                    Card(colors = CardDefaults.cardColors(containerColor = AppTheme.colorScheme.primary)) {
+                        Text(
+                            text = "Item $i",
+                            modifier = Modifier.padding(8.dp),
+                            color = AppTheme.colorScheme.background
+                        )
+                    }
+                }
+            }
 
             Spacer(Modifier.height(24.dp))
 
