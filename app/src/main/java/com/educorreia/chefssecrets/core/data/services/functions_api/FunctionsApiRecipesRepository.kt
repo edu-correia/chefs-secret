@@ -46,6 +46,7 @@ class FunctionsApiRecipesRepository(
                 convertStringToLocalDateTime(recipe.updatedAt),
                 recipe.ingredients,
                 recipe.instructions,
+                recipe.utensils,
                 recipe.duration,
                 recipe.servings,
                 RecipeCost.valueOf(recipe.cost.toUpperCase()),

@@ -167,6 +167,10 @@ fun RecipeDetailsScreenPreview() {
             "Chop onion and garlic, sauté in a pan with olive oil.",
             "Add ground beef, cook until browned.",
         ),
+        utensils = listOf(
+            "1 spoon",
+            "2 cooking pots"
+        ),
         duration = 40,
         servings = 2,
         cost = "medium",

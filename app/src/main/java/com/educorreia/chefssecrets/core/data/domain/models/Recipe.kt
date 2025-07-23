@@ -15,6 +15,7 @@ data class Recipe(
     val updatedAt: LocalDateTime,
     val ingredients: List<String>,
     val instructions: List<String>,
+    val utensils: List<String>,
     val duration: Int,
     val servings: Int,
     val cost: RecipeCost,

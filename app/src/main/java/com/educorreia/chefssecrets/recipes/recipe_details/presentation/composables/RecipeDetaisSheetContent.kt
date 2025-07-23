@@ -15,19 +15,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -116,6 +113,21 @@ fun RecipeDetaisSheetContent(
             Spacer(Modifier.height(24.dp))
 
             SubtopicTitle(
+                title = "Utensils:",
+                iconDrawableRes = R.drawable.ic_utensils
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            BulletList(
+                items = recipe?.utensils ?: listOf(),
+                lineSpacing = 4.dp,
+                style = AppTheme.typography.body.copy(color = AppTheme.colorScheme.onBackground),
+            )
+
+            Spacer(Modifier.height(24.dp))
+
+            SubtopicTitle(
                 title = "Cooking instructions:",
                 iconDrawableRes = R.drawable.ic_cooking_pot
             )
@@ -143,7 +155,8 @@ fun RecipeDetaisSheetContent(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 for (tag in recipe?.tags ?: listOf()) {
-                    Card(colors = CardDefaults.cardColors(containerColor = AppTheme.colorScheme.primary)) {
+                    Card(colors = CardDefaults.cardColors(
+                        containerColor = AppTheme.colorScheme.primary)) {
                         Text(
                             text = tag,
                             modifier = Modifier.padding(8.dp),
@@ -168,6 +181,8 @@ fun RecipeDetaisSheetContent(
                 style = AppTheme.typography.bodySmall,
                 color = AppTheme.colorScheme.onBackground.copy(alpha = 0.7f),
             )
+
+            Spacer(Modifier.height(24.dp))
         }
     }
 }
@@ -199,6 +214,10 @@ fun RecipeDetaisSheetContentPreview() {
                         "Boil water in a pot and cook spaghetti until al dente.",
                         "Chop onion and garlic, sauté in a pan with olive oil.",
                         "Add ground beef, cook until browned.",
+                    ),
+                    utensils = listOf(
+                        "1 spoon",
+                        "2 cooking pots"
                     ),
                     duration = 40,
                     servings = 2,
