@@ -34,7 +34,6 @@ class FirebaseUserAuth : UserAuthService {
             name = displayName ?: "",
             email = email ?: "",
             photoUrl = photoUrl.toString(),
-            phoneNumber = phoneNumber
         )
     }
 

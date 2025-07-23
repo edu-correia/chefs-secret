@@ -110,7 +110,6 @@ fun RecipesListScreenPreview() {
                     name = "John Doe",
                     email = "test@mail.com",
                     photoUrl = "987654321",
-                    phoneNumber = null
                 )
             )
         }

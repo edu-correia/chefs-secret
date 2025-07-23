@@ -42,6 +42,7 @@ import com.educorreia.chefssecrets.recipes.recipe_details.presentation.composabl
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.composables.RecipeDetaisSheetContent
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.composables.rememberParallaxConnection
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.math.roundToInt
 
 val BOTTOM_SHEET_MAX_FRACTION = 0.75f
@@ -50,9 +51,12 @@ val BOTTOM_SHEET_MIN_HEIGHT = 200.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeDetailsScreenRoot(
-    viewModel: RecipeDetailsViewModel = koinViewModel<RecipeDetailsViewModel>(),
     arguments: RecipeDetailsRoute
 ) {
+    val viewModel: RecipeDetailsViewModel = koinViewModel(
+        parameters = { parametersOf(arguments.recipeId) }
+    )
+
     val uiState = viewModel.uiState.collectAsState()
 
     ScaffoldSetup()
@@ -89,7 +93,7 @@ fun RecipeDetailsScreenRoot(
         },
         sheetDragHandle = { CustomSheetDragHandle() }
     ) {
-        RecipeDetailsScreen(uiState.value, viewModel::onEvent, arguments, imageOffsetPx.value)
+        RecipeDetailsScreen(uiState.value, viewModel::onEvent, imageOffsetPx.value)
     }
 }
 
@@ -97,7 +101,6 @@ fun RecipeDetailsScreenRoot(
 fun RecipeDetailsScreen(
     uiState: RecipeDetailsUiState,
     onEvent: (RecipeDetailsAction) -> Unit,
-    arguments: RecipeDetailsRoute,
     imageOffset: Float
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -184,9 +187,11 @@ fun RecipeDetailsScreenPreview() {
             sheetPeekHeight = BOTTOM_SHEET_MIN_HEIGHT
         ) {
             RecipeDetailsScreen(
-                uiState = RecipeDetailsUiState(recipe),
+                uiState = RecipeDetailsUiState(
+                    isLoading = false,
+                    recipe = recipe
+                ),
                 onEvent = {},
-                arguments = RecipeDetailsRoute("1234"),
                 imageOffset = 0f
             )
         }

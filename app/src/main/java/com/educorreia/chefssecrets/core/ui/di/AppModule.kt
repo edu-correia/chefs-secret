@@ -11,6 +11,7 @@ import com.educorreia.chefssecrets.login.presentation.LoginViewModel
 import com.educorreia.chefssecrets.recipes.create_recipe.presentation.CreateRecipeViewModel
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.RecipeDetailsViewModel
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.RecipesListViewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -29,6 +30,13 @@ val appModule = module {
 
     viewModelOf(::LoginViewModel)
     viewModelOf(::RecipesListViewModel)
-    viewModelOf(::RecipeDetailsViewModel)
     viewModelOf(::CreateRecipeViewModel)
+
+    viewModel { (recipeId: String) ->
+        RecipeDetailsViewModel(
+            recipeId = recipeId,
+            recipesRepository = get(),
+            navigator = get()
+        )
+    }
 }

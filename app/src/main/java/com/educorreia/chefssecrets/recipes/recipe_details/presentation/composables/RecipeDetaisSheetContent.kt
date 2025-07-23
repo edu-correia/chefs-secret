@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.educorreia.chefssecrets.R
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeUIModel
+import com.educorreia.chefssecrets.recipes.common.domain.models.UserSummaryUIModel
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.BOTTOM_SHEET_MIN_HEIGHT
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.composables.SubtopicTitle
 
@@ -62,7 +63,7 @@ fun RecipeDetaisSheetContent(
 
             Text(
                 style = AppTheme.typography.titleLarge,
-                text = "Mac & Cheese",
+                text = recipe?.title ?: "",
                 color = AppTheme.colorScheme.primary
             )
 
@@ -70,7 +71,7 @@ fun RecipeDetaisSheetContent(
 
             Text(
                 style = AppTheme.typography.body,
-                text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vel lorem nec ante tincidunt malesuada. Nunc porttitor, orci quis tristique vehicula, erat quam iaculis nibh, non ornare justo ex vel lacus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Duis.",
+                text = recipe?.description ?: "",
                 color = AppTheme.colorScheme.onBackground,
                 maxLines = if (isBottomSheetClosed) 3 else Int.MAX_VALUE,
                 overflow = if (isBottomSheetClosed) TextOverflow.Ellipsis else TextOverflow.Visible
@@ -91,10 +92,10 @@ fun RecipeDetaisSheetContent(
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                SmallRecipeInfo("30 min", R.drawable.ic_clock)
-                SmallRecipeInfo("3 servings", R.drawable.ic_serving_plate)
-                SmallRecipeInfo("Easy", R.drawable.ic_low_level)
-                SmallRecipeInfo("Expensive", R.drawable.ic_price_tag)
+                SmallRecipeInfo("${recipe?.duration} min", R.drawable.ic_clock)
+                SmallRecipeInfo("${recipe?.servings} servings", R.drawable.ic_serving_plate)
+                SmallRecipeInfo(recipe?.difficulty ?: "", R.drawable.ic_low_level)
+                SmallRecipeInfo(recipe?.cost ?: "", R.drawable.ic_price_tag)
             }
 
             Spacer(Modifier.height(24.dp))
@@ -107,12 +108,7 @@ fun RecipeDetaisSheetContent(
             Spacer(Modifier.height(8.dp))
 
             BulletList(
-                items = listOf(
-                    "dwkladawklm",
-                    "dwkladdwaawklm",
-                    "dwkladaadwawklm",
-                    "dwkladadawddwklm",
-                ),
+                items = recipe?.ingredients ?: listOf(),
                 lineSpacing = 4.dp,
                 style = AppTheme.typography.body.copy(color = AppTheme.colorScheme.onBackground),
             )
@@ -127,12 +123,7 @@ fun RecipeDetaisSheetContent(
             Spacer(Modifier.height(8.dp))
 
             BulletList(
-                items = listOf(
-                    "dwkladawklm",
-                    "dwkladdwaawklm",
-                    "dwkladaadwawklm",
-                    "dwkladadawddwklm",
-                ),
+                items = recipe?.instructions ?: listOf(),
                 lineSpacing = 4.dp,
                 style = AppTheme.typography.body.copy(color = AppTheme.colorScheme.onBackground),
             )
@@ -151,10 +142,10 @@ fun RecipeDetaisSheetContent(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                for (i in 1..9) {
+                for (tag in recipe?.tags ?: listOf()) {
                     Card(colors = CardDefaults.cardColors(containerColor = AppTheme.colorScheme.primary)) {
                         Text(
-                            text = "Item $i",
+                            text = tag,
                             modifier = Modifier.padding(8.dp),
                             color = AppTheme.colorScheme.background
                         )
@@ -165,7 +156,7 @@ fun RecipeDetaisSheetContent(
             Spacer(Modifier.height(24.dp))
 
             Text(
-                text = "Created yesterday",
+                text = recipe?.createdAt ?: "",
                 style = AppTheme.typography.bodySmall,
                 color = AppTheme.colorScheme.onBackground.copy(alpha = 0.7f),
             )
@@ -173,7 +164,7 @@ fun RecipeDetaisSheetContent(
             Spacer(Modifier.height(8.dp))
 
             Text(
-                text = "Updated 25 minutes ago",
+                text = recipe?.updatedAt ?: "",
                 style = AppTheme.typography.bodySmall,
                 color = AppTheme.colorScheme.onBackground.copy(alpha = 0.7f),
             )
@@ -191,7 +182,35 @@ fun RecipeDetaisSheetContentPreview() {
             .height(if(isBottomSheetClosed) BOTTOM_SHEET_MIN_HEIGHT else Float.MAX_VALUE.dp)
         ) {
             RecipeDetaisSheetContent(
-                recipe = null,
+                recipe = RecipeUIModel(
+                    id = "123",
+                    title = "Spaghetti Bolognese",
+                    description = "A hearty Italian classic with a rich meat sauce.",
+                    videoUrl = "",
+                    photoUrl = "",
+                    createdAt = "25 minutes ago",
+                    updatedAt = "Last month",
+                    ingredients = listOf(
+                        "200g spaghetti",
+                        "1 onion",
+                        "2 garlic cloves",
+                    ),
+                    instructions = listOf(
+                        "Boil water in a pot and cook spaghetti until al dente.",
+                        "Chop onion and garlic, sauté in a pan with olive oil.",
+                        "Add ground beef, cook until browned.",
+                    ),
+                    duration = 40,
+                    servings = 2,
+                    cost = "medium",
+                    difficulty = "medium",
+                    tags = listOf("dinner", "italian", "meat"),
+                    owner = UserSummaryUIModel(
+                        id = "123",
+                        name = "John Doe",
+                        photoUrl = "987654321",
+                    )
+                ),
                 isBottomSheetClosed = isBottomSheetClosed
             )
         }

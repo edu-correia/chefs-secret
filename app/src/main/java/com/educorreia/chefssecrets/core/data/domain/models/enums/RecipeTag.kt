@@ -40,5 +40,6 @@ enum class RecipeTag {
     BEVERAGE,
     SALAD,
     SOUP,
-    APPETIZER
+    APPETIZER,
+    HEALTHY
 }
