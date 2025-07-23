@@ -1,7 +1,5 @@
 package com.educorreia.chefssecrets.core.data.services.functions_api
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.educorreia.chefssecrets.core.data.domain.interfaces.RecipesRepository
 import com.educorreia.chefssecrets.core.data.domain.models.Recipe
 import com.educorreia.chefssecrets.core.data.domain.models.RecipeSummary
@@ -10,7 +8,6 @@ import com.educorreia.chefssecrets.core.data.domain.models.enums.RecipeCost
 import com.educorreia.chefssecrets.core.data.domain.models.enums.RecipeDifficulty
 import com.educorreia.chefssecrets.core.data.domain.models.enums.RecipeTag
 import com.educorreia.chefssecrets.core.data.utils.convertStringToLocalDateTime
-import java.time.LocalDateTime
 
 class FunctionsApiRecipesRepository(
     private val apiService: ApiService
@@ -31,7 +28,6 @@ class FunctionsApiRecipesRepository(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getRecipeById(recipeId: String): Recipe {
         return try {
             val recipe = apiService.getRecipeById(recipeId).body()!!.recipe
