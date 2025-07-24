@@ -169,7 +169,7 @@ fun RecipeDetaisSheetContent(
             Spacer(Modifier.height(24.dp))
 
             Text(
-                text = recipe?.createdAt ?: "",
+                text = "Created ${recipe?.createdAt}",
                 style = AppTheme.typography.bodySmall,
                 color = AppTheme.colorScheme.onBackground.copy(alpha = 0.7f),
             )
@@ -177,7 +177,7 @@ fun RecipeDetaisSheetContent(
             Spacer(Modifier.height(8.dp))
 
             Text(
-                text = recipe?.updatedAt ?: "",
+                text = "Updated ${recipe?.updatedAt}",
                 style = AppTheme.typography.bodySmall,
                 color = AppTheme.colorScheme.onBackground.copy(alpha = 0.7f),
             )
@@ -204,7 +204,7 @@ fun RecipeDetaisSheetContentPreview() {
                     videoUrl = "",
                     photoUrl = "",
                     createdAt = "25 minutes ago",
-                    updatedAt = "Last month",
+                    updatedAt = "last month",
                     ingredients = listOf(
                         "200g spaghetti",
                         "1 onion",

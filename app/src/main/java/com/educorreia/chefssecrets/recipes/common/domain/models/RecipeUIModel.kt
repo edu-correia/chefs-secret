@@ -1,6 +1,8 @@
 package com.educorreia.chefssecrets.recipes.common.domain.models
 
 import com.educorreia.chefssecrets.core.data.domain.models.Recipe
+import com.educorreia.chefssecrets.core.data.utils.capitalizeString
+import com.educorreia.chefssecrets.core.data.utils.toRelativeTimeSpanString
 
 data class RecipeUIModel (
     val id: String,
@@ -28,16 +30,19 @@ data class RecipeUIModel (
                 description = recipe.description,
                 videoUrl = recipe.videoUrl,
                 photoUrl = recipe.photoUrl,
-                createdAt = recipe.createdAt.toString(),
-                updatedAt = recipe.updatedAt.toString(),
+                createdAt = recipe.createdAt.toRelativeTimeSpanString().toLowerCase(),
+                updatedAt = recipe.updatedAt.toRelativeTimeSpanString().toLowerCase(),
                 ingredients = recipe.ingredients,
                 instructions = recipe.instructions,
                 utensils = recipe.utensils,
                 duration = recipe.duration,
                 servings = recipe.servings,
-                cost = recipe.cost.name.lowercase(),
-                difficulty = recipe.difficulty.name.lowercase(),
-                tags = recipe.tags.map { it.name },
+                cost = capitalizeString(recipe.cost.name.lowercase()),
+                difficulty = capitalizeString(recipe.difficulty.name.lowercase()),
+                tags = recipe.tags.map {
+                    capitalizeString(it.name.lowercase())
+                        .replace("_", " ")
+                },
                 owner = UserSummaryUIModel.fromDomain(recipe.owner)
             )
         }
