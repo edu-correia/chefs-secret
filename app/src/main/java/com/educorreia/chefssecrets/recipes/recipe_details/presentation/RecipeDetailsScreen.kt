@@ -2,6 +2,15 @@ package com.educorreia.chefssecrets.recipes.recipe_details.presentation
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -40,6 +49,7 @@ import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeUIModel
 import com.educorreia.chefssecrets.recipes.common.domain.models.UserSummaryUIModel
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.composables.CustomSheetDragHandle
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.composables.RecipeDetaisSheetContent
+import com.educorreia.chefssecrets.recipes.recipe_details.presentation.composables.RecipeImageLoading
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.composables.rememberParallaxConnection
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -47,6 +57,8 @@ import kotlin.math.roundToInt
 
 val BOTTOM_SHEET_MAX_FRACTION = 0.75f
 val BOTTOM_SHEET_MIN_HEIGHT = 200.dp
+val SHEET_SLIDE_ANIMATION_DURATION = 1000
+val MAIN_IMAGE_SWITCH_ANIMATION_DURATION = 300
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,10 +78,16 @@ fun RecipeDetailsScreenRoot(
         skipHiddenState = true
     )
     val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState)
-    val sheetPeekHeight = BOTTOM_SHEET_MIN_HEIGHT
+
+    val animatedPeekHeight by animateDpAsState(
+        targetValue = if (uiState.value.isLoading) 0.dp else BOTTOM_SHEET_MIN_HEIGHT,
+        label = "SheetPeekHeightAnimation",
+        animationSpec = tween(durationMillis = SHEET_SLIDE_ANIMATION_DURATION)
+    )
+
     val (imageOffsetPx, measurementModifier) = rememberParallaxConnection(
         sheetState = sheetState,
-        sheetPeekHeight = sheetPeekHeight,
+        sheetPeekHeight = animatedPeekHeight,
     )
 
     val isBottomSheetClosed by remember {
@@ -82,14 +100,26 @@ fun RecipeDetailsScreenRoot(
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         modifier = measurementModifier,
-        sheetPeekHeight = sheetPeekHeight,
+        sheetPeekHeight = animatedPeekHeight,
         sheetContainerColor = AppTheme.colorScheme.background,
         sheetContent = {
-            RecipeDetaisSheetContent(
-                recipe = uiState.value.recipe,
-                isBottomSheetClosed = isBottomSheetClosed,
-                maxHeightFraction = BOTTOM_SHEET_MAX_FRACTION
-            )
+            AnimatedVisibility(
+                visible = !uiState.value.isLoading,
+
+                enter = slideInVertically(
+                    initialOffsetY = { fullHeight -> fullHeight },
+                    animationSpec = tween(
+                        durationMillis = SHEET_SLIDE_ANIMATION_DURATION,
+                        easing = LinearOutSlowInEasing
+                    )
+                ),
+            ) {
+                RecipeDetaisSheetContent(
+                    recipe = uiState.value.recipe,
+                    isBottomSheetClosed = isBottomSheetClosed,
+                    maxHeightFraction = BOTTOM_SHEET_MAX_FRACTION
+                )
+            }
         },
         sheetDragHandle = { CustomSheetDragHandle() }
     ) {
@@ -103,19 +133,20 @@ fun RecipeDetailsScreen(
     onEvent: (RecipeDetailsAction) -> Unit,
     imageOffset: Float
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        SubcomposeAsyncImage(
-            model =  uiState.recipe?.photoUrl,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxSize()
-                .offset {
-                    IntOffset(x = 0, y = imageOffset.roundToInt())
-                },
-            error = {
-                Image(
-                    painter = painterResource(R.drawable.img_recipe_example),
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        AnimatedContent(
+            targetState = uiState.isLoading,
+            label = "RecipeImageAnimation",
+            transitionSpec = {
+                fadeIn(animationSpec = tween(MAIN_IMAGE_SWITCH_ANIMATION_DURATION)) togetherWith
+                        fadeOut(animationSpec = tween(MAIN_IMAGE_SWITCH_ANIMATION_DURATION))
+            }
+        ) { screenIsLoading ->
+            if (screenIsLoading) {
+                RecipeImageLoading()
+            } else {
+                SubcomposeAsyncImage(
+                    model =  uiState.recipe?.photoUrl,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -123,9 +154,21 @@ fun RecipeDetailsScreen(
                         .offset {
                             IntOffset(x = 0, y = imageOffset.roundToInt())
                         },
+                    error = {
+                        Image(
+                            painter = painterResource(R.drawable.img_recipe_example),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .offset {
+                                    IntOffset(x = 0, y = imageOffset.roundToInt())
+                                },
+                        )
+                    }
                 )
             }
-        )
+        }
 
         IconButton(
             onClick = { onEvent(RecipeDetailsAction.GoBack) },

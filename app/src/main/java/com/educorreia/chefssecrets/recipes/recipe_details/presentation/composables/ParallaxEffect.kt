@@ -35,7 +35,7 @@ fun rememberParallaxConnection(
             val currentY = sheetState.requireOffset()
             val sheetDeltaY = startY - currentY
             val endY = 0f
-            val totalTravelDistance = startY - endY
+            val totalTravelDistance = maxOf(0.0f, startY - endY)
             val clampedDeltaY = sheetDeltaY.coerceIn(0f, totalTravelDistance)
 
             -(clampedDeltaY / parallaxFactor)

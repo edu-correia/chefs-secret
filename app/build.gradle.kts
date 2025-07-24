@@ -76,6 +76,9 @@ dependencies {
     // OkHttp
     implementation(libs.bundles.okhttp)
 
+    // Lottie
+    implementation(libs.bundles.lottie)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

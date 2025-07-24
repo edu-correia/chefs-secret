@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.educorreia.chefssecrets.core.data.domain.interfaces.RecipesRepository
 import com.educorreia.chefssecrets.core.ui.navigation.Navigator
 import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeUIModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -22,6 +23,9 @@ class RecipeDetailsViewModel(
 
         viewModelScope.launch {
             val recipe = recipesRepository.getRecipeById(recipeId)
+
+            // Simulate a little latency to better examine the loading animation:
+            // delay(2000)
 
             _uiState.value = _uiState.value.copy(
                 isLoading = false,
