@@ -1,12 +1,15 @@
 package com.educorreia.chefssecrets.core.data.services.functions_api
 
 import com.educorreia.chefssecrets.core.data.domain.interfaces.RecipesRepository
+import com.educorreia.chefssecrets.core.data.domain.models.Job
+import com.educorreia.chefssecrets.core.data.domain.models.JobType
 import com.educorreia.chefssecrets.core.data.domain.models.Recipe
 import com.educorreia.chefssecrets.core.data.domain.models.RecipeSummary
 import com.educorreia.chefssecrets.core.data.domain.models.User
 import com.educorreia.chefssecrets.core.data.domain.models.enums.RecipeCost
 import com.educorreia.chefssecrets.core.data.domain.models.enums.RecipeDifficulty
 import com.educorreia.chefssecrets.core.data.domain.models.enums.RecipeTag
+import com.educorreia.chefssecrets.core.data.services.functions_api.requests.RecipeExtractionRequest
 import com.educorreia.chefssecrets.core.data.utils.convertStringToLocalDateTime
 
 class FunctionsApiRecipesRepository(
@@ -54,6 +57,24 @@ class FunctionsApiRecipesRepository(
                     recipe.owner.name,
                     recipe.owner.photoUrl
                 ),
+            )
+        } catch (e: Exception) {
+            throw Error("Error:" + e.message, e)
+        }
+    }
+
+    override suspend fun enqueueExtraction(videoUrl: String): Job {
+        return try {
+            val body = RecipeExtractionRequest(videoUrl = videoUrl)
+
+            val jobResponse = apiService.enqueueRecipeExtraction(body).body()!!.job
+
+            Job(
+                jobResponse.id,
+                jobResponse.status,
+                JobType.valueOf(jobResponse.type.toUpperCase()),
+                jobResponse.userId,
+                convertStringToLocalDateTime(jobResponse.createdAt),
             )
         } catch (e: Exception) {
             throw Error("Error:" + e.message, e)
