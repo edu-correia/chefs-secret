@@ -2,7 +2,7 @@ package com.educorreia.chefssecrets.core.data.services.functions_api
 
 import com.educorreia.chefssecrets.core.data.domain.interfaces.RecipesRepository
 import com.educorreia.chefssecrets.core.data.domain.models.Job
-import com.educorreia.chefssecrets.core.data.domain.models.JobType
+import com.educorreia.chefssecrets.core.data.domain.models.enums.JobType
 import com.educorreia.chefssecrets.core.data.domain.models.Recipe
 import com.educorreia.chefssecrets.core.data.domain.models.RecipeSummary
 import com.educorreia.chefssecrets.core.data.domain.models.User

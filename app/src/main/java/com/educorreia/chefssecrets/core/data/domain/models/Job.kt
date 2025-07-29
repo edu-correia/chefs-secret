@@ -1,5 +1,6 @@
 package com.educorreia.chefssecrets.core.data.domain.models
 
+import com.educorreia.chefssecrets.core.data.domain.models.enums.JobType
 import java.time.LocalDateTime
 
 data class Job(
