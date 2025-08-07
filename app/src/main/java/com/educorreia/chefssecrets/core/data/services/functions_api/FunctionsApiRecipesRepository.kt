@@ -6,6 +6,7 @@ import com.educorreia.chefssecrets.core.data.domain.models.enums.JobType
 import com.educorreia.chefssecrets.core.data.domain.models.Recipe
 import com.educorreia.chefssecrets.core.data.domain.models.RecipeSummary
 import com.educorreia.chefssecrets.core.data.domain.models.User
+import com.educorreia.chefssecrets.core.data.domain.models.VideoPreview
 import com.educorreia.chefssecrets.core.data.domain.models.enums.RecipeCost
 import com.educorreia.chefssecrets.core.data.domain.models.enums.RecipeDifficulty
 import com.educorreia.chefssecrets.core.data.domain.models.enums.RecipeTag
@@ -57,6 +58,19 @@ class FunctionsApiRecipesRepository(
                     recipe.owner.name,
                     recipe.owner.photoUrl
                 ),
+            )
+        } catch (e: Exception) {
+            throw Error("Error:" + e.message, e)
+        }
+    }
+
+    override suspend fun getVideoPreview(videoUrl: String): VideoPreview {
+        return try {
+            val preview = apiService.getVideoPreview(videoUrl).body()!!.preview
+
+            VideoPreview(
+                preview.previewImageUrl,
+                preview.videoOwnerUsername
             )
         } catch (e: Exception) {
             throw Error("Error:" + e.message, e)

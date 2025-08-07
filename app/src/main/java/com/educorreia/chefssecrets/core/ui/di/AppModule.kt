@@ -11,6 +11,7 @@ import com.educorreia.chefssecrets.login.presentation.LoginViewModel
 import com.educorreia.chefssecrets.recipes.create_recipe.presentation.CreateRecipeViewModel
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.RecipeDetailsViewModel
 import com.educorreia.chefssecrets.recipes.recipes_list.presentation.RecipesListViewModel
+import com.educorreia.chefssecrets.recipes.enqueue_recipe_extraction.presentation.EnqueueRecipeExtractionViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
@@ -37,6 +38,13 @@ val appModule = module {
             recipeId = recipeId,
             recipesRepository = get(),
             navigator = get()
+        )
+    }
+
+    viewModel { (videoUrl: String) ->
+        EnqueueRecipeExtractionViewModel(
+            videoUrl = videoUrl,
+            recipesRepository = get(),
         )
     }
 }

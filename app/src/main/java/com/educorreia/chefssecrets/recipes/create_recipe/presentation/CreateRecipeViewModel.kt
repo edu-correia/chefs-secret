@@ -27,9 +27,6 @@ class CreateRecipeViewModel(
     private var _uiState = MutableStateFlow(CreateRecipeUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val validationErrorChannel = Channel<UiText>()
-    val validationError = validationErrorChannel.receiveAsFlow()
-
     private val _effect = MutableSharedFlow<CreateRecipeEffect>()
     val effect = _effect.asSharedFlow()
 

@@ -22,7 +22,7 @@ class ShareActivity : ComponentActivity() {
             AppTheme {
                 if (shareData != null) {
                     EnqueueRecipeExtractionScreenRoot(
-                        videoLink = shareData,
+                        videoUrl = shareData,
                         onDismiss = { finish() }
                     )
                 } else {
