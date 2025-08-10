@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ChefsSecrets</string>
+    <string name="app_name">Chef\'s Secrets</string>
     <string name="share_menu_description">Save your recipes!</string>
     <string name="error_recipe_name_empty">Recipe name can\'t be empty</string>
     <string name="error_recipe_description_empty">Recipe description can\'t be empty</string>
