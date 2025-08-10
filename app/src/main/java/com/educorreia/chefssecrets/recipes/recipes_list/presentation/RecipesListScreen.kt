@@ -29,13 +29,13 @@ fun RecipesListScreenRoot(
     viewModel: RecipesListViewModel = koinViewModel<RecipesListViewModel>(),
 ) {
     val uiState = viewModel.uiState.collectAsState()
-    val currentUser = viewModel.currentUser.collectAsState()
+    val userState = viewModel.userState.collectAsState()
 
     ScaffoldSetup(
         topBar = {
             UserHeader(
-                userFirstName = currentUser.value?.getFirstName(),
-                userPhotoUrl = currentUser.value?.photoUrl
+                userFirstName = userState.value.currentUser?.getFirstName(),
+                userPhotoUrl = userState.value.currentUser?.photoUrl
             )
         },
         floatingActionButton = {
@@ -46,7 +46,7 @@ fun RecipesListScreenRoot(
         floatingActionButtonPosition = FabPosition.Center
     )
 
-    RecipesListScreen(uiState.value, viewModel::onEvent, currentUser.value)
+    RecipesListScreen(uiState.value, viewModel::onEvent, userState.value.currentUser)
 }
 
 @Composable

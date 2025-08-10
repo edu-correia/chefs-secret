@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -47,6 +48,7 @@ import com.educorreia.chefssecrets.core.ui.scaffold.ScaffoldSetup
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeUIModel
 import com.educorreia.chefssecrets.recipes.common.domain.models.UserSummaryUIModel
+import com.educorreia.chefssecrets.recipes.common.presentation.FloatingRoundButton
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.composables.CustomSheetDragHandle
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.composables.RecipeDetaisSheetContent
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.composables.RecipeImageLoading
@@ -170,20 +172,12 @@ fun RecipeDetailsScreen(
             }
         }
 
-        IconButton(
+        FloatingRoundButton(
+            icon = Icons.AutoMirrored.Filled.ArrowBack,
             onClick = { onEvent(RecipeDetailsAction.GoBack) },
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .statusBarsPadding()
-                .padding(16.dp)
-                .background(AppTheme.colorScheme.background, CircleShape)
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Back",
-                tint = AppTheme.colorScheme.primary
-            )
-        }
+            modifier = Modifier.align(Alignment.TopStart),
+            contentDescription = "Back",
+        )
     }
 }
 

@@ -2,39 +2,33 @@ package com.educorreia.chefssecrets.recipes.enqueue_recipe_extraction.presentati
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.SubcomposeAsyncImage
-import com.educorreia.chefssecrets.R
-import com.educorreia.chefssecrets.core.ui.scaffold.PreviewScaffold
-import com.educorreia.chefssecrets.core.ui.scaffold.ScaffoldSetup
+import com.educorreia.chefssecrets.core.data.domain.models.User
+import com.educorreia.chefssecrets.core.ui.auth.UserState
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 import com.educorreia.chefssecrets.recipes.common.domain.models.VideoPreviewUIModel
-import com.educorreia.chefssecrets.recipes.common.presentation.GoBackHeader
-import com.educorreia.chefssecrets.recipes.common.presentation.FilledButton
+import com.educorreia.chefssecrets.recipes.common.presentation.FloatingRoundButton
+import com.educorreia.chefssecrets.recipes.enqueue_recipe_extraction.presentation.composables.BackgroundImage
+import com.educorreia.chefssecrets.recipes.enqueue_recipe_extraction.presentation.composables.ExtractRecipeButton
+import com.educorreia.chefssecrets.recipes.enqueue_recipe_extraction.presentation.composables.RecipePreview
+import com.educorreia.chefssecrets.recipes.enqueue_recipe_extraction.presentation.composables.ShimmerExtractRecipe
+import com.educorreia.chefssecrets.recipes.enqueue_recipe_extraction.presentation.composables.ShimmerRecipePreview
+import com.educorreia.chefssecrets.recipes.enqueue_recipe_extraction.presentation.composables.SignInBeforeExtraction
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -48,6 +42,7 @@ fun EnqueueRecipeExtractionScreenRoot(
     )
 
     val uiState = viewModel.uiState.collectAsState()
+    val userState = viewModel.userState.collectAsState()
 
     LaunchedEffect(true) {
         viewModel.effect.collect { effect ->
@@ -59,111 +54,59 @@ fun EnqueueRecipeExtractionScreenRoot(
         }
     }
 
-//    ScaffoldSetup(
-//        topBar = {
-//            GoBackHeader(
-//                onGoBack = {
-//                    onDismiss()
-//                },
-//                text = "Extract recipe"
-//            )
-//        }
-//    )
-
-    EnqueueRecipeExtractionScreen(videoUrl, uiState.value, viewModel::onEvent)
+    EnqueueRecipeExtractionScreen(videoUrl, onDismiss, uiState.value,
+        viewModel::onEvent, userState.value)
 }
 
 @Composable
 fun EnqueueRecipeExtractionScreen(
     videoUrl: String,
+    onDismiss: () -> Unit,
     uiState: EnqueueRecipeExtractionUiState,
-    onEvent: (EnqueueRecipeExtractionAction) -> Unit
+    onEvent: (EnqueueRecipeExtractionAction) -> Unit,
+    userState: UserState
 ) {
-    Column (
-        modifier = Modifier
-            .fillMaxSize()
-            .background(AppTheme.colorScheme.background)
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        Text(
-            text = "Recipe preview",
-            style = AppTheme.typography.titleLarge,
-            color = AppTheme.colorScheme.primary
+        BackgroundImage()
+
+        FloatingRoundButton(
+            icon = Icons.Default.Close,
+            onClick = { onDismiss() },
+            modifier = Modifier.align(Alignment.TopStart),
+            contentDescription = "Close"
         )
 
-        Spacer(modifier = Modifier.size(24.dp))
-
-        SubcomposeAsyncImage(
-            model = uiState.videoPreview?.previewImageUrl ?: "",
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
+        Column (
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .height(240.dp)
-                .aspectRatio(12 / 16f)
-                .clip(RoundedCornerShape(4.dp)),
-            error = {
-                Image(
-                    painter = painterResource(R.drawable.img_recipe_example),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .height(240.dp)
-                        .aspectRatio(12 / 16f)
-                        .clip(RoundedCornerShape(4.dp))
-                )
+                .fillMaxSize()
+                .padding(24.dp)
+        ) {
+            if (userState.isLoggedIn) {
+                if (uiState.isLoading) {
+                    ShimmerRecipePreview()
+                    Spacer(Modifier.height(32.dp))
+                    ShimmerExtractRecipe()
+                } else {
+                    RecipePreview(
+                        videoUrl = videoUrl,
+                        user = userState.currentUser,
+                        videoPreview = uiState.videoPreview
+                    )
+                    Spacer(Modifier.height(32.dp))
+                    ExtractRecipeButton {
+                        onEvent(EnqueueRecipeExtractionAction.Submit)
+                    }
+                }
+            } else {
+                SignInBeforeExtraction {
+                    onEvent(EnqueueRecipeExtractionAction.LoginWithGoogle)
+                }
             }
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Row (
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.Top,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = "Video link:",
-                style = AppTheme.typography.titleSmall,
-                color = AppTheme.colorScheme.primary,
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = videoUrl,
-                style = AppTheme.typography.body,
-                color = AppTheme.colorScheme.onBackground,
-            )
         }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Row (
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = "Author username:",
-                style = AppTheme.typography.titleSmall,
-                color = AppTheme.colorScheme.primary,
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = "@${uiState.videoPreview?.videoOwnerUsername}",
-                style = AppTheme.typography.body,
-                color = AppTheme.colorScheme.onBackground,
-            )
-        }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        FilledButton(
-            text = "Start extraction",
-            onClick = {
-            },
-            modifier = Modifier
-                .padding(bottom = 24.dp)
-        )
     }
 }
 
@@ -172,25 +115,26 @@ fun EnqueueRecipeExtractionScreen(
 @Composable
 fun EnqueueRecipeExtractionScreenPreview() {
     AppTheme {
-        PreviewScaffold(
-            topBar = {
-                GoBackHeader(
-                    onGoBack = {},
-                    text = "Extract recipe"
-                )
-            }
-        ) {
-            EnqueueRecipeExtractionScreen(
-                videoUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                uiState = EnqueueRecipeExtractionUiState(
-                    false,
-                    VideoPreviewUIModel(
-                        "https://i.imgur.com/R0eBtWi.png",
-                        "username"
-                    ),
+        EnqueueRecipeExtractionScreen(
+            videoUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            onDismiss = {},
+            uiState = EnqueueRecipeExtractionUiState(
+                isLoading = false,
+                videoPreview = VideoPreviewUIModel(
+                    "https://i.imgur.com/R0eBtWi.png",
+                    "username"
                 ),
-                onEvent = {}
+            ),
+            onEvent = {},
+            userState = UserState(
+                isLoggedIn = true,
+                currentUser = User(
+                    id = "1234",
+                    name = "Jane Doe",
+                    email = "test@mail.com",
+                    photoUrl = "https://i.imgur.com/R0eBtWi.png",
+                )
             )
-        }
+        )
     }
 }

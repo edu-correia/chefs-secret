@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.educorreia.chefssecrets.core.data.domain.interfaces.RecipesRepository
 import com.educorreia.chefssecrets.core.data.domain.models.User
 import com.educorreia.chefssecrets.core.ui.auth.Authenticator
+import com.educorreia.chefssecrets.core.ui.auth.UserState
 import com.educorreia.chefssecrets.core.ui.navigation.Navigator
 import com.educorreia.chefssecrets.core.ui.navigation.Route
 import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeSummaryUIModel
-import com.educorreia.chefssecrets.recipes.common.domain.models.RecipeUIModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,7 +22,7 @@ class RecipesListViewModel(
     private val _uiState = MutableStateFlow(RecipesListUiState())
     val uiState = _uiState.asStateFlow()
 
-    val currentUser: StateFlow<User?> = authenticator.currentUser
+    val userState: StateFlow<UserState> = authenticator.userState
 
     init {
         _uiState.value = _uiState.value.copy(isLoading = true)

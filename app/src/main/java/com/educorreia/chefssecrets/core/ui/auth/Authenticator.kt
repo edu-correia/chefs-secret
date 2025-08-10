@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface Authenticator {
     val authActions: Flow<AuthAction>
-    val currentUser: StateFlow<User?>
+    val userState: StateFlow<UserState>
 
     suspend fun loginWithGoogle()
     suspend fun logout()

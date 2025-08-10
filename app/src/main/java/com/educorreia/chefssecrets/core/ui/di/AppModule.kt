@@ -45,6 +45,7 @@ val appModule = module {
         EnqueueRecipeExtractionViewModel(
             videoUrl = videoUrl,
             recipesRepository = get(),
+            authenticator = get()
         )
     }
 }
