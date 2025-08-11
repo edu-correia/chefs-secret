@@ -13,17 +13,17 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class EnqueueRecipeExtractionViewModel(
+class ExtractRecipeViewModel(
     private val videoUrl: String,
     private val recipesRepository: RecipesRepository,
     private val authenticator: Authenticator,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(EnqueueRecipeExtractionUiState())
+    private val _uiState = MutableStateFlow(ExtractRecipeUiState())
     val uiState = _uiState.asStateFlow()
 
     val userState: StateFlow<UserState> = authenticator.userState
 
-    private val _effect = MutableSharedFlow<EnqueueRecipeExtractionEffect>()
+    private val _effect = MutableSharedFlow<ExtractRecipeEffect>()
     val effect = _effect.asSharedFlow()
 
     init {
@@ -42,10 +42,10 @@ class EnqueueRecipeExtractionViewModel(
         }
     }
 
-    fun onEvent(event: EnqueueRecipeExtractionAction) {
+    fun onEvent(event: ExtractRecipeAction) {
         when (event) {
-            is EnqueueRecipeExtractionAction.Submit -> submit()
-            is EnqueueRecipeExtractionAction.LoginWithGoogle -> {
+            is ExtractRecipeAction.Submit -> submit()
+            is ExtractRecipeAction.LoginWithGoogle -> {
                 viewModelScope.launch {
                     authenticator.loginWithGoogle()
                 }

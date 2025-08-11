@@ -33,11 +33,11 @@ import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun EnqueueRecipeExtractionScreenRoot(
+fun ExtractRecipeScreenRoot(
     videoUrl: String,
     onDismiss: () -> Unit
 ) {
-    val viewModel: EnqueueRecipeExtractionViewModel = koinViewModel(
+    val viewModel: ExtractRecipeViewModel = koinViewModel(
         parameters = { parametersOf(videoUrl) }
     )
 
@@ -47,23 +47,23 @@ fun EnqueueRecipeExtractionScreenRoot(
     LaunchedEffect(true) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is EnqueueRecipeExtractionEffect.CloseScreen -> {
+                is ExtractRecipeEffect.CloseScreen -> {
                     onDismiss()
                 }
             }
         }
     }
 
-    EnqueueRecipeExtractionScreen(videoUrl, onDismiss, uiState.value,
+    ExtractRecipeScreen(videoUrl, onDismiss, uiState.value,
         viewModel::onEvent, userState.value)
 }
 
 @Composable
-fun EnqueueRecipeExtractionScreen(
+fun ExtractRecipeScreen(
     videoUrl: String,
     onDismiss: () -> Unit,
-    uiState: EnqueueRecipeExtractionUiState,
-    onEvent: (EnqueueRecipeExtractionAction) -> Unit,
+    uiState: ExtractRecipeUiState,
+    onEvent: (ExtractRecipeAction) -> Unit,
     userState: UserState
 ) {
     Box(
@@ -98,12 +98,12 @@ fun EnqueueRecipeExtractionScreen(
                     )
                     Spacer(Modifier.height(32.dp))
                     ExtractRecipeButton {
-                        onEvent(EnqueueRecipeExtractionAction.Submit)
+                        onEvent(ExtractRecipeAction.Submit)
                     }
                 }
             } else {
                 SignInBeforeExtraction {
-                    onEvent(EnqueueRecipeExtractionAction.LoginWithGoogle)
+                    onEvent(ExtractRecipeAction.LoginWithGoogle)
                 }
             }
         }
@@ -113,12 +113,12 @@ fun EnqueueRecipeExtractionScreen(
 @Preview(uiMode = UI_MODE_NIGHT_NO, showBackground = true)
 @Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun EnqueueRecipeExtractionScreenPreview() {
+fun ExtractRecipeScreenPreview() {
     AppTheme {
-        EnqueueRecipeExtractionScreen(
+        ExtractRecipeScreen(
             videoUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
             onDismiss = {},
-            uiState = EnqueueRecipeExtractionUiState(
+            uiState = ExtractRecipeUiState(
                 isLoading = false,
                 videoPreview = VideoPreviewUIModel(
                     "https://i.imgur.com/R0eBtWi.png",

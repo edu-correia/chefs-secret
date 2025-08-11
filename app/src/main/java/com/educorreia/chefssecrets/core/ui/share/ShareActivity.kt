@@ -11,7 +11,7 @@ import com.educorreia.chefssecrets.core.ui.auth.AuthAction
 import com.educorreia.chefssecrets.core.ui.auth.Authenticator
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 import com.educorreia.chefssecrets.core.ui.utils.ObserveAsEvents
-import com.educorreia.chefssecrets.recipes.enqueue_recipe_extraction.presentation.EnqueueRecipeExtractionScreenRoot
+import com.educorreia.chefssecrets.recipes.enqueue_recipe_extraction.presentation.ExtractRecipeScreenRoot
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -54,7 +54,7 @@ class ShareActivity : ComponentActivity() {
                 }
 
                 if (shareData != null) {
-                    EnqueueRecipeExtractionScreenRoot(
+                    ExtractRecipeScreenRoot(
                         videoUrl = shareData,
                         onDismiss = { finish() }
                     )
