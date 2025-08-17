@@ -16,10 +16,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.educorreia.chefssecrets.core.data.domain.models.User
 import com.educorreia.chefssecrets.core.ui.auth.UserState
+import com.educorreia.chefssecrets.core.ui.snackbar.CustomSnackbarVisuals
+import com.educorreia.chefssecrets.core.ui.snackbar.LocalSnackbarHostState
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 import com.educorreia.chefssecrets.recipes.common.domain.models.VideoPreviewUIModel
 import com.educorreia.chefssecrets.recipes.common.presentation.FloatingRoundButton
@@ -29,6 +32,7 @@ import com.educorreia.chefssecrets.recipes.enqueue_recipe_extraction.presentatio
 import com.educorreia.chefssecrets.recipes.enqueue_recipe_extraction.presentation.composables.ShimmerExtractRecipe
 import com.educorreia.chefssecrets.recipes.enqueue_recipe_extraction.presentation.composables.ShimmerRecipePreview
 import com.educorreia.chefssecrets.recipes.enqueue_recipe_extraction.presentation.composables.SignInBeforeExtraction
+import com.educorreia.chefssecrets.recipes.enqueue_recipe_extraction.presentation.composables.TimedSuccessOverlay
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -44,11 +48,22 @@ fun ExtractRecipeScreenRoot(
     val uiState = viewModel.uiState.collectAsState()
     val userState = viewModel.userState.collectAsState()
 
+    val context = LocalContext.current
+    val snackbarHostState = LocalSnackbarHostState.current
+
     LaunchedEffect(true) {
         viewModel.effect.collect { effect ->
             when (effect) {
                 is ExtractRecipeEffect.CloseScreen -> {
                     onDismiss()
+                }
+                is ExtractRecipeEffect.ShowErrorMessage -> {
+                    snackbarHostState.showSnackbar(
+                        CustomSnackbarVisuals(
+                            message = effect.message.asString(context),
+                            icon = Icons.Default.Close
+                        )
+                    )
                 }
             }
         }
@@ -107,6 +122,11 @@ fun ExtractRecipeScreen(
                 }
             }
         }
+
+        TimedSuccessOverlay(
+            isVisible = uiState.showSuccessMessage,
+            onTimeout = { onDismiss() }
+        )
     }
 }
 

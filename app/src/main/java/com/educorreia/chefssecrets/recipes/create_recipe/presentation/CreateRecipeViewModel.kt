@@ -5,19 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.educorreia.chefssecrets.R
 import com.educorreia.chefssecrets.core.ui.auth.Authenticator
 import com.educorreia.chefssecrets.core.ui.navigation.Navigator
-import com.educorreia.chefssecrets.core.ui.utils.UiText
 import com.educorreia.chefssecrets.core.ui.utils.UiText.StringResource
-import com.educorreia.chefssecrets.recipes.create_recipe.domain.exceptions.ValidationException
-import com.educorreia.chefssecrets.recipes.create_recipe.domain.exceptions.ValidationException.*
+import com.educorreia.chefssecrets.recipes.create_recipe.domain.exceptions.CreateRecipeValidationException
+import com.educorreia.chefssecrets.recipes.create_recipe.domain.exceptions.CreateRecipeValidationException.*
 import com.educorreia.chefssecrets.recipes.create_recipe.domain.use_cases.ValidateRecipeDescription
 import com.educorreia.chefssecrets.recipes.create_recipe.domain.use_cases.ValidateRecipeImageUrl
 import com.educorreia.chefssecrets.recipes.create_recipe.domain.use_cases.ValidateRecipeName
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class CreateRecipeViewModel(
@@ -57,7 +54,7 @@ class CreateRecipeViewModel(
             ValidateRecipeName().execute(state.name)
             ValidateRecipeDescription().execute(state.description)
             ValidateRecipeImageUrl().execute(state.image)
-        } catch (e: ValidationException) {
+        } catch (e: CreateRecipeValidationException) {
             val errorMessage = when (e::class.java) {
                 EmptyRecipeNameException::class.java -> {
                     StringResource(R.string.error_recipe_name_empty)

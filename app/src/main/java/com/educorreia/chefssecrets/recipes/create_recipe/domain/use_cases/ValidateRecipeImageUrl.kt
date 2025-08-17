@@ -1,6 +1,6 @@
 package com.educorreia.chefssecrets.recipes.create_recipe.domain.use_cases
 
-import com.educorreia.chefssecrets.recipes.create_recipe.domain.exceptions.ValidationException.*
+import com.educorreia.chefssecrets.recipes.create_recipe.domain.exceptions.CreateRecipeValidationException.*
 
 class ValidateRecipeImageUrl {
     fun execute(imageUrl: String) {

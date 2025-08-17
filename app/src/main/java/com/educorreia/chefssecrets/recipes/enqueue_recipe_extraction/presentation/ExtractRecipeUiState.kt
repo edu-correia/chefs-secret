@@ -5,4 +5,5 @@ import com.educorreia.chefssecrets.recipes.common.domain.models.VideoPreviewUIMo
 data class ExtractRecipeUiState(
     val isLoading: Boolean = false,
     val videoPreview: VideoPreviewUIModel? = null,
+    val showSuccessMessage: Boolean = false
 )

@@ -7,4 +7,7 @@
     <string name="error_recipe_image_url_invalid_link">Recipe image URL\'s link is invalid</string>
     <string name="unknown_error">Unknown error</string>
     <string name="go_back">Go back\n</string>
+    <string name="error_empty_video_url">No video URL was provided</string>
+    <string name="error_invalid_video_url">Invalid video URL format</string>
+    <string name="error_video_url_must_be_from_instagram">Video URL must be from an Instagram reel</string>
 </resources>

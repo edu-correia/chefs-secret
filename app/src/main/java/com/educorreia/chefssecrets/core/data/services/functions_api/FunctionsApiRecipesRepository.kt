@@ -12,20 +12,26 @@ import com.educorreia.chefssecrets.core.data.domain.models.enums.RecipeDifficult
 import com.educorreia.chefssecrets.core.data.domain.models.enums.RecipeTag
 import com.educorreia.chefssecrets.core.data.services.functions_api.requests.RecipeExtractionRequest
 import com.educorreia.chefssecrets.core.data.utils.convertStringToLocalDateTime
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class FunctionsApiRecipesRepository(
     private val apiService: ApiService
 ) : RecipesRepository {
     override suspend fun getRecipes(): List<RecipeSummary> {
         return try {
-            apiService.getRecipes().body()!!.recipes.map {
-                RecipeSummary(
-                    it.id,
-                    it.title,
-                    it.description,
-                    it.photoUrl,
-                    null
-                )
+            withContext(Dispatchers.IO) {
+                val recipesList = apiService.getRecipes().body()!!.recipes
+
+                recipesList.map {
+                    RecipeSummary(
+                        it.id,
+                        it.title,
+                        it.description,
+                        it.photoUrl,
+                        null
+                    )
+                }
             }
         } catch (e: Exception) {
             throw Error("Error:" + e.message, e)
@@ -34,31 +40,33 @@ class FunctionsApiRecipesRepository(
 
     override suspend fun getRecipeById(recipeId: String): Recipe {
         return try {
-            val recipe = apiService.getRecipeById(recipeId).body()!!.recipe
+            withContext(Dispatchers.IO) {
+                val recipe = apiService.getRecipeById(recipeId).body()!!.recipe
 
-            Recipe(
-                recipe.id,
-                recipe.title,
-                recipe.description,
-                recipe.videoUrl,
-                recipe.photoUrl,
-                convertStringToLocalDateTime(recipe.createdAt),
-                convertStringToLocalDateTime(recipe.updatedAt),
-                recipe.ingredients,
-                recipe.instructions,
-                recipe.utensils,
-                recipe.duration,
-                recipe.servings,
-                RecipeCost.valueOf(recipe.cost.toUpperCase()),
-                RecipeDifficulty.valueOf(recipe.difficulty.toUpperCase()),
-                recipe.tags.map { RecipeTag.valueOf(it.toUpperCase()) },
-                owner = User(
-                    recipe.owner.id,
-                    recipe.owner.email,
-                    recipe.owner.name,
-                    recipe.owner.photoUrl
-                ),
-            )
+                Recipe(
+                    recipe.id,
+                    recipe.title,
+                    recipe.description,
+                    recipe.videoUrl,
+                    recipe.photoUrl,
+                    convertStringToLocalDateTime(recipe.createdAt),
+                    convertStringToLocalDateTime(recipe.updatedAt),
+                    recipe.ingredients,
+                    recipe.instructions,
+                    recipe.utensils,
+                    recipe.duration,
+                    recipe.servings,
+                    RecipeCost.valueOf(recipe.cost.toUpperCase()),
+                    RecipeDifficulty.valueOf(recipe.difficulty.toUpperCase()),
+                    recipe.tags.map { RecipeTag.valueOf(it.toUpperCase()) },
+                    owner = User(
+                        recipe.owner.id,
+                        recipe.owner.email,
+                        recipe.owner.name,
+                        recipe.owner.photoUrl
+                    ),
+                )
+            }
         } catch (e: Exception) {
             throw Error("Error:" + e.message, e)
         }
@@ -66,12 +74,14 @@ class FunctionsApiRecipesRepository(
 
     override suspend fun getVideoPreview(videoUrl: String): VideoPreview {
         return try {
-            val preview = apiService.getVideoPreview(videoUrl).body()!!.preview
+            withContext(Dispatchers.IO) {
+                val preview = apiService.getVideoPreview(videoUrl).body()!!.preview
 
-            VideoPreview(
-                preview.previewImageUrl,
-                preview.videoOwnerUsername
-            )
+                VideoPreview(
+                    preview.previewImageUrl,
+                    preview.videoOwnerUsername
+                )
+            }
         } catch (e: Exception) {
             throw Error("Error:" + e.message, e)
         }
@@ -79,17 +89,19 @@ class FunctionsApiRecipesRepository(
 
     override suspend fun enqueueExtraction(videoUrl: String): Job {
         return try {
-            val body = RecipeExtractionRequest(videoUrl = videoUrl)
+            withContext(Dispatchers.IO) {
+                val body = RecipeExtractionRequest(videoUrl = videoUrl)
 
-            val jobResponse = apiService.enqueueRecipeExtraction(body).body()!!.job
+                val jobResponse = apiService.enqueueRecipeExtraction(body).body()!!.job
 
-            Job(
-                jobResponse.id,
-                jobResponse.status,
-                JobType.valueOf(jobResponse.type.toUpperCase()),
-                jobResponse.userId,
-                convertStringToLocalDateTime(jobResponse.createdAt),
-            )
+                Job(
+                    jobResponse.id,
+                    jobResponse.status,
+                    JobType.valueOf(jobResponse.type.toUpperCase()),
+                    jobResponse.userId,
+                    convertStringToLocalDateTime(jobResponse.createdAt),
+                )
+            }
         } catch (e: Exception) {
             throw Error("Error:" + e.message, e)
         }
