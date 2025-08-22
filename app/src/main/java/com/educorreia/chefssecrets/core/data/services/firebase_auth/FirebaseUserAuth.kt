@@ -37,6 +37,19 @@ class FirebaseUserAuth : UserAuthService {
         )
     }
 
+    override fun addAuthStateListener(onAuthStateChanged: (User?) -> Unit): Unit {
+        auth.addAuthStateListener {
+            onAuthStateChanged(auth.currentUser?.run {
+                User(
+                    id = uid,
+                    name = displayName ?: "",
+                    email = email ?: "",
+                    photoUrl = photoUrl.toString(),
+                )
+            })
+        }
+    }
+
     override suspend fun loginWithGoogle(context: Context, onLogin: () -> Unit) {
         val credential = getGoogleCredential(context)
 
@@ -76,8 +89,7 @@ class FirebaseUserAuth : UserAuthService {
         val idTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
         val idToken = idTokenCredential.idToken
         val authCredential = GoogleAuthProvider.getCredential(idToken, null)
-        val user = auth.signInWithCredential(authCredential).await().user
-        println("EDUAAA: ${user?.displayName}")
+        auth.signInWithCredential(authCredential).await()
 
         onLogin()
     }

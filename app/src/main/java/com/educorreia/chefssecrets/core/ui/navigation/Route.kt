@@ -4,6 +4,9 @@ import kotlinx.serialization.Serializable
 
 sealed interface Route {
     @Serializable
+    object SplashScreenRoute: Route
+
+    @Serializable
     object RecipesListRoute: Route
 
     @Serializable

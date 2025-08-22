@@ -17,19 +17,12 @@ fun LoginSetup(
     navigator: Navigator,
     scope: CoroutineScope
 ) {
-    LaunchedEffect(Unit) {
-        if(userAuthService.isUserAuthenticated()) {
-            navigator.navigate(Route.RecipesListRoute)
-        }
-    }
-
     val context = LocalContext.current
     ObserveAsEvents(flow = authenticator.authActions) { action ->
         when (action) {
             is AuthAction.LoginWithGoogle -> {
                 scope.launch {
                     userAuthService.loginWithGoogle(context) {
-                        authenticator.refreshAuthenticatedUser()
                         scope.launch {
                             navigator.navigate(Route.RecipesListRoute)
                         }
@@ -39,7 +32,6 @@ fun LoginSetup(
             is AuthAction.Logout -> {
                 scope.launch {
                     userAuthService.logout(context) {
-                        authenticator.refreshAuthenticatedUser()
                         scope.launch {
                             navigator.navigate(Route.LoginRoute)
                         }

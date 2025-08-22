@@ -61,17 +61,13 @@ class ShareActivity : ComponentActivity() {
                             when (action) {
                                 is AuthAction.LoginWithGoogle -> {
                                     scope.launch {
-                                        userAuthService.loginWithGoogle(context) {
-                                            authenticator.refreshAuthenticatedUser()
-                                        }
+                                        userAuthService.loginWithGoogle(context)
                                     }
                                 }
 
                                 is AuthAction.Logout -> {
                                     scope.launch {
-                                        userAuthService.logout(context) {
-                                            authenticator.refreshAuthenticatedUser()
-                                        }
+                                        userAuthService.logout(context)
                                     }
                                 }
                             }

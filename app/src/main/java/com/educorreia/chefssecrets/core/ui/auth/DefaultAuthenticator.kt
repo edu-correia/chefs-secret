@@ -13,6 +13,9 @@ class DefaultAuthenticator(
     private val _authActions = Channel<AuthAction>()
     override val authActions = _authActions.receiveAsFlow()
 
+    private val _authState = MutableStateFlow<AuthState>(AuthState.Loading)
+    override val authState: StateFlow<AuthState> = _authState.asStateFlow()
+
     private val _userState = MutableStateFlow<UserState>(
         UserState(
             currentUser = userAuthService.getAuthenticatedUser(),
@@ -21,18 +24,25 @@ class DefaultAuthenticator(
     )
     override val userState: StateFlow<UserState> = _userState.asStateFlow()
 
+    init {
+        userAuthService.addAuthStateListener { user ->
+            _authState.value = if (user == null) {
+                AuthState.Unauthenticated
+            } else {
+                AuthState.Authenticated
+            }
+            _userState.value = _userState.value.copy(
+                currentUser = user,
+                isLoggedIn = user != null
+            )
+        }
+    }
+
     override suspend fun loginWithGoogle() {
         _authActions.send(AuthAction.LoginWithGoogle)
     }
 
     override suspend fun logout() {
         _authActions.send(AuthAction.Logout)
-    }
-
-    override fun refreshAuthenticatedUser() {
-        _userState.value = _userState.value.copy(
-            isLoggedIn = true,
-            currentUser = userAuthService.getAuthenticatedUser()
-        )
     }
 }

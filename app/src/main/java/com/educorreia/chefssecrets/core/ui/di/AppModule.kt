@@ -7,6 +7,7 @@ import com.educorreia.chefssecrets.core.ui.auth.DefaultAuthenticator
 import com.educorreia.chefssecrets.core.ui.navigation.DefaultNavigator
 import com.educorreia.chefssecrets.core.ui.navigation.Navigator
 import com.educorreia.chefssecrets.core.ui.navigation.Route
+import com.educorreia.chefssecrets.core.ui.splash.SplashScreenViewModel
 import com.educorreia.chefssecrets.login.presentation.LoginViewModel
 import com.educorreia.chefssecrets.recipes.create_recipe.presentation.CreateRecipeViewModel
 import com.educorreia.chefssecrets.recipes.recipe_details.presentation.RecipeDetailsViewModel
@@ -18,7 +19,7 @@ import org.koin.dsl.module
 
 val appModule = module {
     single<Navigator> {
-        DefaultNavigator(Route.LoginRoute)
+        DefaultNavigator(Route.SplashScreenRoute)
     }
 
     single<UserAuthService> {
@@ -32,6 +33,7 @@ val appModule = module {
     viewModelOf(::LoginViewModel)
     viewModelOf(::RecipesListViewModel)
     viewModelOf(::CreateRecipeViewModel)
+    viewModelOf(::SplashScreenViewModel)
 
     viewModel { (recipeId: String) ->
         RecipeDetailsViewModel(

@@ -18,8 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class CreateRecipeViewModel(
-    private val navigator: Navigator,
-    private val authenticator: Authenticator
+    private val navigator: Navigator
 ) : ViewModel() {
     private var _uiState = MutableStateFlow(CreateRecipeUiState())
     val uiState = _uiState.asStateFlow()
