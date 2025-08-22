@@ -20,6 +20,8 @@ googleIdVersion = "1.1.1"
 retrofitVersion = "2.9.0"
 okhttpVersion = "4.12.0"
 lottieVersion = "6.4.0"
+splashScreenVersion="1.0.1"
+materialVersion="1.10.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -67,6 +69,10 @@ okhttp-interceptor = { group = "com.squareup.okhttp3", name = "logging-intercept
 # Lottie
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottieVersion" }
 
+# Core - Splash Screen
+splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreenVersion" }
+android-material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -82,3 +88,4 @@ firebase-auth = ["google-firebase-auth", "androidx-credentials", "androidx-crede
 retrofit = ["retrofit", "retrofit-converter-gson"]
 okhttp = ["okhttp", "okhttp-interceptor"]
 lottie = ["lottie-compose"]
+splashscreen = ["splashscreen", "android-material"]
