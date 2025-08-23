@@ -2,15 +2,19 @@ package com.educorreia.chefssecrets.recipes.create_recipe.presentation
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,15 +25,21 @@ import com.educorreia.chefssecrets.core.ui.snackbar.CustomSnackbarVisuals
 import com.educorreia.chefssecrets.core.ui.snackbar.LocalSnackbarHostState
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 import com.educorreia.chefssecrets.recipes.common.presentation.GoBackHeader
-import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.CustomTextField
-import com.educorreia.chefssecrets.recipes.common.presentation.FilledButton
+import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.form_steps.RecipeCookingVideoStep
+import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.form_steps.RecipeIngredientsStep
+import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.form_steps.RecipeInstructionsStep
+import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.form_steps.RecipeMediaStep
+import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.form_steps.RecipeTagsStep
+import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.form_steps.RecipeTitleAndDescStep
+import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.form_steps.RecipeUtensilsStep
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CreateRecipeScreenRoot(
     viewModel: CreateRecipeViewModel = koinViewModel<CreateRecipeViewModel>()
 ) {
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     val context = LocalContext.current
     val snackbarHostState = LocalSnackbarHostState.current
@@ -48,6 +58,12 @@ fun CreateRecipeScreenRoot(
         }
     }
 
+    val pagerState = rememberPagerState(pageCount = { FormSteps.entries.size })
+
+    LaunchedEffect(uiState.currentPage) {
+        pagerState.animateScrollToPage(uiState.currentPage.ordinal)
+    }
+
     ScaffoldSetup(
         topBar = {
             GoBackHeader(
@@ -57,10 +73,16 @@ fun CreateRecipeScreenRoot(
         }
     )
 
-    CreateRecipeScreen(
-        uiState = uiState.value,
-        onEvent = viewModel::onEvent
-    )
+    VerticalPager(
+        state = pagerState,
+        modifier = Modifier.fillMaxSize(),
+        userScrollEnabled = false
+    ) {
+        CreateRecipeScreen(
+            uiState = uiState,
+            onEvent = viewModel::onEvent
+        )
+    }
 }
 
 @Composable
@@ -68,50 +90,21 @@ fun CreateRecipeScreen(
     uiState: CreateRecipeUiState,
     onEvent: (CreateRecipeAction) -> Unit
 ) {
-    Column (
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(AppTheme.colorScheme.background)
-            .padding(16.dp)
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
     ) {
-        CustomTextField(
-            label = "Recipe name",
-            value = uiState.name,
-            onChange = { value ->
-                onEvent(CreateRecipeAction.NameChanged(value))
-            }
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        CustomTextField(
-            label = "Recipe description",
-            value = uiState.description,
-            onChange = { value ->
-                onEvent(CreateRecipeAction.DescriptionChanged(value))
-            }
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        CustomTextField(
-            label = "Recipe image URL",
-            value = uiState.image,
-            onChange = { value ->
-                onEvent(CreateRecipeAction.ImageUrlChanged(value))
-            }
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        FilledButton(
-            text = "Create",
-            onClick = {
-                onEvent(CreateRecipeAction.Submit)
-            },
-            modifier = Modifier
-                .padding(bottom = 24.dp)
-        )
+        when (uiState.currentPage) {
+            FormSteps.TITLE_AND_DESC -> RecipeTitleAndDescStep(goToNextStep = {onEvent(CreateRecipeAction.GoToNextStep)})
+            FormSteps.MEDIA -> RecipeMediaStep(goToNextStep = {onEvent(CreateRecipeAction.GoToPreviousStep)})
+            FormSteps.COOKING_INFO -> RecipeCookingVideoStep(goToNextStep = {onEvent(CreateRecipeAction.GoToNextStep)})
+            FormSteps.INGREDIENTS -> RecipeIngredientsStep(goToNextStep = {onEvent(CreateRecipeAction.GoToNextStep)})
+            FormSteps.UTENSILS -> RecipeUtensilsStep(goToNextStep = {onEvent(CreateRecipeAction.GoToNextStep)})
+            FormSteps.INSTRUCTIONS -> RecipeInstructionsStep(goToNextStep = {onEvent(CreateRecipeAction.GoToNextStep)})
+            FormSteps.TAGS -> RecipeTagsStep(goToNextStep = {})
+        }
     }
 }
 
@@ -129,7 +122,9 @@ fun CreateRecipeScreenPreview() {
             }
         ) {
             CreateRecipeScreen(
-                uiState = CreateRecipeUiState("Mac & Cheese"),
+                uiState = CreateRecipeUiState(
+                    name = "Mac & Cheese"
+                ),
                 onEvent = {}
             )
         }

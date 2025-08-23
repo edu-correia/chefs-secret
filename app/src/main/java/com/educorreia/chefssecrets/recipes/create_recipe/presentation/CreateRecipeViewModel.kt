@@ -3,7 +3,6 @@ package com.educorreia.chefssecrets.recipes.create_recipe.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.educorreia.chefssecrets.R
-import com.educorreia.chefssecrets.core.ui.auth.Authenticator
 import com.educorreia.chefssecrets.core.ui.navigation.Navigator
 import com.educorreia.chefssecrets.core.ui.utils.UiText.StringResource
 import com.educorreia.chefssecrets.recipes.create_recipe.domain.exceptions.CreateRecipeValidationException
@@ -15,6 +14,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CreateRecipeViewModel(
@@ -28,6 +28,14 @@ class CreateRecipeViewModel(
 
     fun onEvent(event: CreateRecipeAction) {
         when (event) {
+            is CreateRecipeAction.GoBack -> {
+                viewModelScope.launch {
+                    navigator.goBack()
+                }
+            }
+            is CreateRecipeAction.GoToPreviousStep -> goToPreviousStep()
+            is CreateRecipeAction.GoToNextStep -> goToNextStep()
+            is CreateRecipeAction.Submit -> submit()
             is CreateRecipeAction.NameChanged -> {
                 _uiState.value = _uiState.value.copy(name = event.name)
             }
@@ -37,12 +45,28 @@ class CreateRecipeViewModel(
             is CreateRecipeAction.ImageUrlChanged -> {
                 _uiState.value = _uiState.value.copy(image = event.imageUrl)
             }
-            is CreateRecipeAction.GoBack -> {
-                viewModelScope.launch {
-                    navigator.goBack()
-                }
+        }
+    }
+
+    private fun goToNextStep() {
+        viewModelScope.launch {
+            val currentStep = _uiState.value.currentPage
+            val currentIndex = FormSteps.entries.indexOf(currentStep)
+            val nextStep = FormSteps.entries.getOrNull(currentIndex + 1)
+            if (nextStep != null) {
+                _uiState.update { it.copy(currentPage = nextStep) }
             }
-            CreateRecipeAction.Submit -> submit()
+        }
+    }
+
+    private fun goToPreviousStep() {
+        viewModelScope.launch {
+            val currentStep = _uiState.value.currentPage
+            val currentIndex = FormSteps.entries.indexOf(currentStep)
+            val previousStep = FormSteps.entries.getOrNull(currentIndex - 1)
+            if (previousStep != null) {
+                _uiState.update { it.copy(currentPage = previousStep) }
+            }
         }
     }
 
