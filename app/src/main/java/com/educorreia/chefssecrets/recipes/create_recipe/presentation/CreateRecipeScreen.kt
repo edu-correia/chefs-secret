@@ -72,10 +72,10 @@ fun CreateRecipeScreenRoot(
 
     VerticalPager(
         state = pagerState,
+        userScrollEnabled = false,
         modifier = Modifier
             .fillMaxSize()
-            .background(AppTheme.colorScheme.background),
-        userScrollEnabled = false
+            .background(AppTheme.colorScheme.background)
     ) {
         CreateRecipeScreen(
             uiState = uiState,
@@ -101,7 +101,10 @@ fun CreateRecipeScreen(
                 goToPreviousStep = { onEvent(CreateRecipeAction.GoToPreviousStep) },
                 goToNextStep = { onEvent(CreateRecipeAction.GoToNextStep) }
             )
-            FormSteps.COOKING_INFO -> RecipeCookingVideoStep(goToNextStep = {onEvent(CreateRecipeAction.GoToNextStep)})
+            FormSteps.COOKING_INFO -> RecipeCookingVideoStep(
+                goToPreviousStep = { onEvent(CreateRecipeAction.GoToPreviousStep) },
+                goToNextStep = { onEvent(CreateRecipeAction.GoToNextStep) }
+            )
             FormSteps.INGREDIENTS -> RecipeIngredientsStep(goToNextStep = {onEvent(CreateRecipeAction.GoToNextStep)})
             FormSteps.UTENSILS -> RecipeUtensilsStep(goToNextStep = {onEvent(CreateRecipeAction.GoToNextStep)})
             FormSteps.INSTRUCTIONS -> RecipeInstructionsStep(goToNextStep = {onEvent(CreateRecipeAction.GoToNextStep)})
