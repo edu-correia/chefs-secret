@@ -51,7 +51,8 @@ fun NewRecipeButton(
             style = TextStyle(
                 fontSize = 20.sp,
                 fontFamily = AclonicaFont
-            )
+            ),
+            color = AppTheme.colorScheme.onTertiary
         )
     }
 }

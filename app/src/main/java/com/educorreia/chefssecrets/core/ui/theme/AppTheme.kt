@@ -20,7 +20,7 @@ private val lightColorTheme = AppColorScheme(
     secondary = Yellow20,
     onSecondary = Color.Unspecified,
     tertiary = Green30,
-    onTertiary = Color.Unspecified
+    onTertiary = White
 )
 
 private val darkColorTheme = AppColorScheme(
@@ -31,7 +31,7 @@ private val darkColorTheme = AppColorScheme(
     secondary = Green70,
     onSecondary = Color.Unspecified,
     tertiary = Green30,
-    onTertiary = Color.Unspecified,
+    onTertiary = White,
 )
 
 private val typography = AppTypography(

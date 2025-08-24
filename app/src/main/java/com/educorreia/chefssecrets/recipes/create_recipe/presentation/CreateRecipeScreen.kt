@@ -2,29 +2,26 @@ package com.educorreia.chefssecrets.recipes.create_recipe.presentation
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.educorreia.chefssecrets.core.ui.scaffold.PreviewScaffold
 import com.educorreia.chefssecrets.core.ui.scaffold.ScaffoldSetup
 import com.educorreia.chefssecrets.core.ui.snackbar.CustomSnackbarVisuals
 import com.educorreia.chefssecrets.core.ui.snackbar.LocalSnackbarHostState
 import com.educorreia.chefssecrets.core.ui.theme.AppTheme
-import com.educorreia.chefssecrets.recipes.common.presentation.GoBackHeader
+import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.GoBackHeader
 import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.form_steps.RecipeCookingVideoStep
 import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.form_steps.RecipeIngredientsStep
 import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.form_steps.RecipeInstructionsStep
@@ -32,7 +29,6 @@ import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composable
 import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.form_steps.RecipeTagsStep
 import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.form_steps.RecipeTitleAndDescStep
 import com.educorreia.chefssecrets.recipes.create_recipe.presentation.composables.form_steps.RecipeUtensilsStep
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -68,14 +64,17 @@ fun CreateRecipeScreenRoot(
         topBar = {
             GoBackHeader(
                 onGoBack = { viewModel.onEvent(CreateRecipeAction.GoBack) },
-                text = "Create recipe"
+                mainText = "Create recipe",
+                description = "There you are! Let’s create a fun and intuitive title and description for your recipe!"
             )
         }
     )
 
     VerticalPager(
         state = pagerState,
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(AppTheme.colorScheme.background),
         userScrollEnabled = false
     ) {
         CreateRecipeScreen(
@@ -91,14 +90,17 @@ fun CreateRecipeScreen(
     onEvent: (CreateRecipeAction) -> Unit
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize().statusBarsPadding(),
         contentAlignment = Alignment.Center
     ) {
         when (uiState.currentPage) {
-            FormSteps.TITLE_AND_DESC -> RecipeTitleAndDescStep(goToNextStep = {onEvent(CreateRecipeAction.GoToNextStep)})
-            FormSteps.MEDIA -> RecipeMediaStep(goToNextStep = {onEvent(CreateRecipeAction.GoToPreviousStep)})
+            FormSteps.TITLE_AND_DESC -> RecipeTitleAndDescStep(
+                goToNextStep = { onEvent(CreateRecipeAction.GoToNextStep) }
+            )
+            FormSteps.MEDIA -> RecipeMediaStep(
+                goToPreviousStep = { onEvent(CreateRecipeAction.GoToPreviousStep) },
+                goToNextStep = { onEvent(CreateRecipeAction.GoToNextStep) }
+            )
             FormSteps.COOKING_INFO -> RecipeCookingVideoStep(goToNextStep = {onEvent(CreateRecipeAction.GoToNextStep)})
             FormSteps.INGREDIENTS -> RecipeIngredientsStep(goToNextStep = {onEvent(CreateRecipeAction.GoToNextStep)})
             FormSteps.UTENSILS -> RecipeUtensilsStep(goToNextStep = {onEvent(CreateRecipeAction.GoToNextStep)})
@@ -117,7 +119,8 @@ fun CreateRecipeScreenPreview() {
             topBar = {
                 GoBackHeader(
                     onGoBack = {},
-                    text = "Create recipe"
+                    mainText = "Create recipe",
+                    description = "There you are! Let’s create a fun and intuitive title and description for your recipe!"
                 )
             }
         ) {

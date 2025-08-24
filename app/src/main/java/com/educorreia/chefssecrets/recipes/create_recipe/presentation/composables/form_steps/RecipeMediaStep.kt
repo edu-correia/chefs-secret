@@ -10,6 +10,7 @@ import com.educorreia.chefssecrets.core.ui.theme.AppTheme
 
 @Composable
 fun RecipeMediaStep(
+    goToPreviousStep: () -> Unit,
     goToNextStep: () -> Unit
 ) {
     Text("Recipe media")
@@ -24,7 +25,8 @@ fun RecipeMediaStep(
 fun RecipeMediaStepPreview() {
     AppTheme {
         RecipeMediaStep(
-            goToNextStep = {}
+            goToNextStep = {},
+            goToPreviousStep = {}
         )
     }
 }
