@@ -66,8 +66,7 @@ fun NumberCarouselPicker(
     // or when the currentValue changes from outside
     LaunchedEffect(key1 = currentValue, key2 = values) {
         val initialIndex = values.indexOf(currentValue).coerceAtLeast(0)
-        // Use animateScrollToItem for a smoother initial positioning
-        lazyListState.animateScrollToItem(initialIndex)
+        lazyListState.scrollToItem(initialIndex)
     }
 
     // Effect to report the new value when the user stops scrolling
